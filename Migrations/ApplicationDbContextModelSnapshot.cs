@@ -74,6 +74,26 @@ namespace ParkingApi.Migrations
                     b.ToTable("ParkingLots");
                 });
 
+            modelBuilder.Entity("ParkingApi.Models.RevokedToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.ToTable("RevokedTokens");
+                });
+
             modelBuilder.Entity("ParkingApi.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -93,9 +113,15 @@ namespace ParkingApi.Migrations
                     b.Property<bool>("RecycleBin")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ParkingApi.Models.Vehicle", b =>
@@ -117,6 +143,9 @@ namespace ParkingApi.Migrations
                         .HasColumnType("boolean");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LicensePlate")
+                        .IsUnique();
 
                     b.ToTable("Vehicles");
                 });

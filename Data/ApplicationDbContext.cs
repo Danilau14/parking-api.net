@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ParkingApi.Models;
 
 namespace ParkingApi.Data;
 
-public class ApplicationDbContext : IdentityDbContext<User>
+public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
@@ -13,17 +12,21 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<ParkingLot> ParkingLots { get; set; }
     public DbSet<Vehicle> Vehicles { get; set; }
     public DbSet<ParkingHistory> ParkingHistories { get; set; }
+    public DbSet<RevokedToken> RevokedTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<User>()
-            .HasIndex(u => u.Email)
+            .HasIndex(user => user.Email)
             .IsUnique();
 
-        modelBuilder.Entity<User>().Ignore(u => u.UserName);
-        modelBuilder.Entity<User>().Ignore(u => u.PhoneNumber);
+        modelBuilder.Entity<Vehicle>()
+            .HasIndex(vehicle => vehicle.LicensePlate)
+            .IsUnique();
 
-
+        modelBuilder.Entity<RevokedToken>()
+            .HasIndex(revokedToken => revokedToken.Token)
+            .IsUnique();
     }
 }

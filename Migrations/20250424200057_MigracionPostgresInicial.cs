@@ -6,24 +6,38 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ParkingApi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class MigracionPostgresInicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "RevokedTokens",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Password = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    RecycleBin = table.Column<bool>(type: "boolean", nullable: false)
+                    Token = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_RevokedTokens", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RecycleBin = table.Column<bool>(type: "boolean", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,9 +71,9 @@ namespace ParkingApi.Migrations
                 {
                     table.PrimaryKey("PK_ParkingLots", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ParkingLots_User_UserId",
+                        name: "FK_ParkingLots_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -104,6 +118,24 @@ namespace ParkingApi.Migrations
                 name: "IX_ParkingLots_UserId",
                 table: "ParkingLots",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RevokedTokens_Token",
+                table: "RevokedTokens",
+                column: "Token",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vehicles_LicensePlate",
+                table: "Vehicles",
+                column: "LicensePlate",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -113,13 +145,16 @@ namespace ParkingApi.Migrations
                 name: "ParkingHistories");
 
             migrationBuilder.DropTable(
+                name: "RevokedTokens");
+
+            migrationBuilder.DropTable(
                 name: "ParkingLots");
 
             migrationBuilder.DropTable(
                 name: "Vehicles");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
         }
     }
 }

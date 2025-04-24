@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ParkingApi.Dto;
+using ParkingApi.Interfaces;
 using ParkingApi.Models;
-using ParkingApi.Models.Enums;
+using ParkingApi.Services.cs;
 
 namespace ParkingApi.Controllers;
 
@@ -13,27 +12,22 @@ namespace ParkingApi.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    private readonly UserManager<User> _userManager;
+    private readonly IUserServiceInterface _userService;
     private readonly IMapper _mapper;
 
-    public UsersController(UserManager<User> userManager, IMapper mapper)
+    public UsersController(IUserServiceInterface userService, IMapper mapper)
     {
-        _userManager = userManager;
+        _userService = userService;
         _mapper = mapper;
     }
-
+    
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] CreateUserDto data)
     {
         var user = _mapper.Map<User>(data);
 
-        var result = await _userManager.CreateAsync(user, user.Password);
-        if (!result.Succeeded)
-            return BadRequest(result.Errors);
-
-        await _userManager.AddToRoleAsync(user, "User");
-
+        await _userService.CreateUserAsync(user);
+      
         return Ok("Usuario creado");
     }
-
 }

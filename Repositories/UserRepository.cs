@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ParkingApi.Data;
 using ParkingApi.Interfaces;
 using ParkingApi.Models;
 
@@ -6,7 +7,7 @@ namespace ParkingApi.Repositories;
 
 public class UserRepository : BaseRepository<User>, IUserRepository
 {
-    public UserRepository(DbContext context) : base(context) { }
+    public UserRepository(ApplicationDbContext context) : base(context) { }
 
     public async Task<User?> FindByEmail(string email)
     {

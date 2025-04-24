@@ -24,7 +24,7 @@ public class ParkingLot
     public required float CostPerHour { get; set; }
     public bool RecycleBin { get; set; } = false;
 
-    public string UserId { get; set; }
+    public int UserId { get; set; }
 
     [ForeignKey("UserId")]
     public required User User { get; set; }

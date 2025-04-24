@@ -1,19 +1,33 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Identity;
 using ParkingApi.Models.Enums;
 
 namespace ParkingApi.Models;
 
-[Table("User")]
-public class User : IdentityUser
+public class User
 {
+    public required string _email;
+    public required List<ParkingLot> _parkingLots;
+
+    [Key]
+    public required int Id { get; set; }
+
     public bool RecycleBin { get; set; } = false;
 
     [Required]
     [DisallowNull]
     [Column(TypeName = "text")]
     public required string Password { get; set; }
-    public required List<ParkingLot> ParkingLots { get; set; }
+
+    [EmailAddress]
+    public required string Email
+    {
+        get => _email;
+        set => _email = value.ToLower();
+    }
+
+    [Required]
+    public required UserRole Role { get; set; } = UserRole.PARTNER;
+    public required List<ParkingLot> ParkingLots { get => _parkingLots; set => _parkingLots = value; }
 }
