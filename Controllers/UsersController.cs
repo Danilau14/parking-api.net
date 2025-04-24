@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using ParkingApi.Dto;
+using ParkingApi.Dto.User;
 using ParkingApi.Interfaces;
 using ParkingApi.Models;
-using ParkingApi.Services.cs;
 
 namespace ParkingApi.Controllers;
 

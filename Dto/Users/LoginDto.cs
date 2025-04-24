@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace ParkingApi.Dto;
+namespace ParkingApi.Dto.User;
 
 public class LoginDto
 {

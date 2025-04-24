@@ -24,11 +24,10 @@ public class ParkingLot
     public required float CostPerHour { get; set; }
     public bool RecycleBin { get; set; } = false;
 
-    public int UserId { get; set; }
+    public int? UserId { get; set; } = null;
 
     [ForeignKey("UserId")]
-    public required User User { get; set; }
+    public User? User { get; set; }
     
     public required ICollection<ParkingHistory> ParkingHistories { get; set; }
-
 }

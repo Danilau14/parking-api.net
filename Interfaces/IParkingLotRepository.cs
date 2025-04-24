@@ -1,5 +1,8 @@
-﻿namespace ParkingApi.Interfaces;
+﻿using ParkingApi.Models;
 
-public interface IParkingLotRepository
+namespace ParkingApi.Interfaces;
+
+public interface IParkingLotRepository : IBaseRepository<ParkingLot>
 {
+    Task<ParkingLot> CreateParkingLot(ParkingLot parkingLot);
 }

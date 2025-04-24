@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ParkingApi.Data;
 using ParkingApi.Interfaces;
-using ParkingApi.Mappings;
 using ParkingApi.Models.Enums;
 using ParkingApi.Repositories;
 using ParkingApi.Services.cs;
 using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
+using ParkingApi.Mappings.Users;
+using ParkingApi.Mappings.ParkingsLot;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,10 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserServiceInterface, UserService>();
 builder.Services.AddScoped<IRevokedTokenRepository, RevokedTokenRepository>();
+builder.Services.AddScoped<IParkingLotRepository, ParkingLotRepository>();
+builder.Services.AddScoped<IParkingLotService, ParkingLotService>();
+
+
 
 
 builder.Services.AddAuthorization(options =>
@@ -99,6 +104,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAutoMapper(cfg => {
     cfg.AddProfile<CreateUserMapping>();
+    cfg.AddProfile<CreateParkingLotMapping>();
+    cfg.AddProfile<ParkingLotMapping>();
 });
 
 var app = builder.Build();

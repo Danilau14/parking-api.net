@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ParkingApi.Dto;
 using ParkingApi.Interfaces;
 using ParkingApi.Models;
-using ParkingApi.Repositories;
-using NuGet.Common;
+using ParkingApi.Dto.User;
 
 namespace ParkingApi.Controllers;
 

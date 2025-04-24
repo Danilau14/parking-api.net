@@ -65,7 +65,7 @@ namespace ParkingApi.Migrations
                     FreeSpaces = table.Column<int>(type: "integer", nullable: false),
                     CostPerHour = table.Column<float>(type: "real", nullable: false),
                     RecycleBin = table.Column<bool>(type: "boolean", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false)
+                    UserId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -74,8 +74,7 @@ namespace ParkingApi.Migrations
                         name: "FK_ParkingLots_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
