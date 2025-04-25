@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ParkingApi.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using ParkingApi.Models;
-using Microsoft.EntityFrameworkCore;
 using ParkingApi.Dto.ParkingsLot;
-using ParkingApi.Dto.Pagination;
 
 namespace ParkingApi.Controllers;
 
@@ -52,10 +50,10 @@ public class ParkingsLotsController : ControllerBase
         }
     }
 
-    [HttpGet()]
+    /*[HttpGet()]
     public async Task<IActionResult> FindParkingsLot([FromQuery] PaginationDto)
     {
 
-    }
+    }*/
 
 }

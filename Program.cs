@@ -58,8 +58,9 @@ builder.Services.AddScoped<IUserServiceInterface, UserService>();
 builder.Services.AddScoped<IRevokedTokenRepository, RevokedTokenRepository>();
 builder.Services.AddScoped<IParkingLotRepository, ParkingLotRepository>();
 builder.Services.AddScoped<IParkingLotService, ParkingLotService>();
-
-
+builder.Services.AddScoped<IParkingHistoryRepository, ParkingHistoryRepository>();
+builder.Services.AddScoped<IParkingHistoryService, ParkingHistoryService>();
+builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 
 
 builder.Services.AddAuthorization(options =>

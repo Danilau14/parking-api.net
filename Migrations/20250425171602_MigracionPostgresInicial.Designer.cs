@@ -12,7 +12,7 @@ using ParkingApi.Data;
 namespace ParkingApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250424213811_MigracionPostgresInicial")]
+    [Migration("20250425171602_MigracionPostgresInicial")]
     partial class MigracionPostgresInicial
     {
         /// <inheritdoc />
@@ -33,7 +33,19 @@ namespace ParkingApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CheckInDate")
+                        .HasColumnType("timestamptz");
+
+                    b.Property<DateTime?>("CheckOutDate")
+                        .HasColumnType("timestamptz");
+
+                    b.Property<float>("CostTotalParkingLot")
+                        .HasColumnType("real");
+
                     b.Property<int>("ParkingLotId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TimeInParkingLot")
                         .HasColumnType("integer");
 
                     b.Property<int>("VehicleId")

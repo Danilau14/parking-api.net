@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -84,6 +85,10 @@ namespace ParkingApi.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ParkingLotId = table.Column<int>(type: "integer", nullable: false),
+                    CheckInDate = table.Column<DateTime>(type: "timestamptz", nullable: false),
+                    CheckOutDate = table.Column<DateTime>(type: "timestamptz", nullable: true),
+                    CostTotalParkingLot = table.Column<float>(type: "real", nullable: false),
+                    TimeInParkingLot = table.Column<int>(type: "integer", nullable: true),
                     VehicleId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

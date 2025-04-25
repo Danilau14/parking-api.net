@@ -1,0 +1,143 @@
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using ParkingApi.Dto.ParkingHistory;
+using ParkingApi.Interfaces;
+using ParkingApi.Models;
+
+namespace ParkingApi.Services.cs;
+
+public class ParkingHistoryService : IParkingHistoryService
+{
+    private readonly IParkingLotRepository _parkingLotRepository;
+    private readonly IVehicleRepository _vehicleRepository;
+    private readonly IParkingHistoryRepository _parkingHistoryRepository;
+
+    public ParkingHistoryService(
+        IParkingLotRepository parkingLotRepository,
+        IVehicleRepository vehicleRepository,
+        IParkingHistoryRepository parkingHistoryRepository
+        )
+    {
+        _parkingLotRepository = parkingLotRepository;
+        _vehicleRepository = vehicleRepository;
+        _parkingHistoryRepository = parkingHistoryRepository;
+    }
+
+    public async Task<ParkingHistory> CreateParkingHistory(
+        CreateParkingHistoryDto createParkingHistoryDto,
+        int partnerId
+        )
+    {
+        var parkingLot = await _parkingLotRepository.FindByParkingLotAndUser(
+            createParkingHistoryDto.ParkingLotId, partnerId
+            );
+
+        if (parkingLot == null)
+        {
+            throw new UnauthorizedAccessException(
+                "This parking lot does not belong to the member"
+                );
+        }
+
+        var vehicle = await _vehicleRepository.FindOneVehicleByLicencePlate(
+            createParkingHistoryDto.LicensePlate
+            );
+
+        if (null == vehicle)
+        {
+            return await this.CreateParkingHistoryForNewVehicle(
+                    createParkingHistoryDto,
+                    parkingLot
+                );
+        }
+
+        if (vehicle.IsParked)
+        {
+            throw new BadHttpRequestException(
+                "Unable to Register Entry, the license plate already exists in this or another parking lot."
+                );
+        }
+
+        var newParkingHistory = await this.CreateParkingHistoryForExistingVehicle(
+                    vehicle,
+                    parkingLot
+                );
+
+        return newParkingHistory;
+    }
+
+    private async Task<ParkingHistory> CreateParkingHistoryForNewVehicle(
+            CreateParkingHistoryDto createParkingHistoryDto,
+            ParkingLot parkingLot
+        )
+    {
+        if (parkingLot.FreeSpaces == 0)
+        {
+            throw new BadHttpRequestException("Parking lot full");
+        }
+
+        var newVehicle = new Vehicle
+        {
+            IsParked = true,
+            LicensePlate = createParkingHistoryDto.LicensePlate,
+            ParkingHistories = []
+        };
+
+        await _vehicleRepository.CreateVehicle(newVehicle);
+
+        parkingLot.FreeSpaces -= 1;
+
+        await _parkingLotRepository.UpdatedParkingLot(parkingLot);
+
+        var newParkingHistory = new ParkingHistory
+        {
+            ParkingLot = parkingLot,
+            Vehicle = newVehicle,
+        };
+
+        var parkingHistorySaved = await _parkingHistoryRepository.CreateParkingHistory(newParkingHistory);
+
+        return parkingHistorySaved;
+    }
+
+    private async Task<ParkingHistory> CreateParkingHistoryForExistingVehicle(
+            Vehicle vehicle,
+            ParkingLot parkingLot
+        )
+    {
+        if (parkingLot.FreeSpaces == 0)
+        {
+            throw new BadHttpRequestException(
+                   "Parking lot full"
+                   );
+        }
+
+        var parkingHistoryOpen = await _parkingHistoryRepository.FindOneParkingHistoryOpen(
+               vehicle.Id,
+               parkingLot.Id
+            );
+
+        if (null == parkingHistoryOpen && vehicle.IsParked) {
+            throw new BadHttpRequestException(
+               "Vehicle in other Parking lot"
+               );
+        }
+
+        vehicle.IsParked = true;
+
+        await _vehicleRepository.UpdateVehicle( vehicle );
+
+        parkingLot.FreeSpaces -= 1;
+
+        await _parkingLotRepository.UpdatedParkingLot(parkingLot);
+
+        var newParkingHistory = new ParkingHistory
+        {
+            ParkingLot = parkingLot,
+            Vehicle = vehicle,
+        };
+
+        var parkingHistorySaved = await _parkingHistoryRepository.CreateParkingHistory(newParkingHistory);
+
+        return parkingHistorySaved;
+    }
+}
