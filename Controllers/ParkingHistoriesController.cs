@@ -2,9 +2,11 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ParkingApi.Dto.Pagination;
 using ParkingApi.Dto.ParkingHistory;
 using ParkingApi.Dto.ParkingsLot;
 using ParkingApi.Interfaces;
+using ParkingApi.Repositories;
 
 namespace ParkingApi.Controllers;
 
@@ -13,12 +15,18 @@ namespace ParkingApi.Controllers;
 public class ParkingHistoriesController : ControllerBase
 {
     private readonly IParkingHistoryService _parkingHistoryService;
+    private readonly IParkingHistoryRepository _parkingHistoryRepository;
     private readonly IMapper _mapper;
 
-    public ParkingHistoriesController(IParkingHistoryService parkingHistoryService, IMapper mapper)
+    public ParkingHistoriesController(
+        IParkingHistoryService parkingHistoryService, 
+        IMapper mapper,
+        IParkingHistoryRepository parkingHistoryRepository
+        )
     {
         _parkingHistoryService = parkingHistoryService;
         _mapper = mapper;
+        _parkingHistoryRepository = parkingHistoryRepository;
     }
 
     [HttpPost("check-in")]
@@ -43,4 +51,25 @@ public class ParkingHistoriesController : ControllerBase
         return Ok(dto);
     }
 
+    [HttpGet("all-vehicles-parked")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<IActionResult> FindParkingsLot([FromQuery] PaginationDto paginationDto)
+    {
+        var (parkingHistories, totalCount) = await _parkingHistoryRepository.FindVehiclesByParkingLot(
+                paginationDto.Page,
+                paginationDto.Limit
+            );
+
+        var parkingsLotDto = _mapper.Map<List<ParkingHistoryDto>>(parkingHistories);
+
+        var result = new
+        {
+            Total = totalCount,
+            paginationDto.Page,
+            TotalPage = (int)Math.Ceiling((double)totalCount / paginationDto.Limit),
+            Data = parkingsLotDto
+        };
+
+        return Ok(result);
+    }
 }

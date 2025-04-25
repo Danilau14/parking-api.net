@@ -8,5 +8,5 @@ public class PaginationDto
     public int Page { get; set; } = 1;
 
     [Range(1, int.MaxValue, ErrorMessage = "The limit must be greater than 0")]
-    public int limit { get; set; } = 10;
+    public int Limit { get; set; } = 10;
 }

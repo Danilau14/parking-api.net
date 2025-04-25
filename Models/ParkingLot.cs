@@ -6,8 +6,7 @@ namespace ParkingApi.Models;
 
 public class ParkingLot
 {
-    [Key]
-    public int Id { get; private set; }
+    public int Id { get; set; }
 
     [Required]
     [Range(0, int.MaxValue, ErrorMessage = "The size must be greater than 0")]

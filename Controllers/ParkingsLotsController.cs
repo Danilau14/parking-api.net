@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using ParkingApi.Models;
 using ParkingApi.Dto.ParkingsLot;
 using Microsoft.AspNetCore.Http.HttpResults;
+using ParkingApi.Dto.Pagination;
 
 namespace ParkingApi.Controllers;
 
@@ -146,10 +147,25 @@ public class ParkingsLotsController : ControllerBase
         return Ok(dto);
     }
 
-    /*[HttpGet()]
-    public async Task<IActionResult> FindParkingsLot([FromQuery] PaginationDto)
+    [HttpGet("all")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<IActionResult> FindParkingsLot([FromQuery] PaginationDto paginationDto)
     {
+        var (parkingsLot, totalCount) = await _parkingLotRepository.FindAndCountAsync(
+                paginationDto.Page,
+                paginationDto.Limit
+            );
 
-    }*/
+        var parkingsLotDto = _mapper.Map<List<ParkingLotDto>>(parkingsLot);
 
+        var result = new
+        {
+            Total = totalCount,
+            paginationDto.Page,
+            TotalPage = (int)Math.Ceiling((double)totalCount / paginationDto.Limit),
+            Data = parkingsLotDto
+        };
+
+        return Ok(result);
+    }
 }

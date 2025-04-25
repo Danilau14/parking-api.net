@@ -5,7 +5,7 @@ namespace ParkingApi.Models;
 
 public class ParkingHistory
 {
-    public int Id { get; private set; }
+    public int Id { get; set; }
 
     [Column(TypeName = "timestamptz")]
     public DateTime CheckInDate { get; set; } = DateTime.UtcNow;
