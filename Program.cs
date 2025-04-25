@@ -109,6 +109,7 @@ builder.Services.AddAutoMapper(cfg => {
     cfg.AddProfile<CreateParkingLotMapping>();
     cfg.AddProfile<ParkingLotMapping>();
     cfg.AddProfile<ParkingHistoryMapping>();
+    cfg.AddProfile<UpdateParkingLotMapping>();
 });
 
 var app = builder.Build();

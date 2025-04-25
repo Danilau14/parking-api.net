@@ -13,4 +13,6 @@ public class ParkingLotDto
     public required float FreeSpaces { get; set; }
 
     public int? PartnerId { get; set; }
+
+    public bool RecycleBin { get; set; }
 }
