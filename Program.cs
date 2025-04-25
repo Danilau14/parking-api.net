@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using ParkingApi.Mappings.Users;
 using ParkingApi.Mappings.ParkingsLot;
 using ParkingApi.Mappings.ParkingHistories;
+using ParkingApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -111,6 +112,9 @@ builder.Services.AddAutoMapper(cfg => {
     cfg.AddProfile<ParkingHistoryMapping>();
     cfg.AddProfile<UpdateParkingLotMapping>();
 });
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+//builder.Services.AddTransient<IEmailService, EmailService>();
 
 var app = builder.Build();
 
