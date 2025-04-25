@@ -92,6 +92,8 @@ public class ParkingHistoryService : IParkingHistoryService
         {
             ParkingLot = parkingLot,
             Vehicle = newVehicle,
+            ParkingLotId = parkingLot.Id,
+            VehicleId = newVehicle.Id
         };
 
         var parkingHistorySaved = await _parkingHistoryRepository.CreateParkingHistory(newParkingHistory);
@@ -134,10 +136,68 @@ public class ParkingHistoryService : IParkingHistoryService
         {
             ParkingLot = parkingLot,
             Vehicle = vehicle,
+            ParkingLotId = parkingLot.Id,
+            VehicleId = vehicle.Id,
         };
 
         var parkingHistorySaved = await _parkingHistoryRepository.CreateParkingHistory(newParkingHistory);
 
         return parkingHistorySaved;
+    }
+
+    public async Task<ParkingHistory> CloseParkingHistory(CreateParkingHistoryDto createParkingHistoryDto)
+    {
+        var parkingLot = await _parkingLotRepository.GetByIdAsync(createParkingHistoryDto.ParkingLotId);
+
+
+        if (parkingLot == null)
+        {
+            throw new KeyNotFoundException("ParkingLot not found");
+        }
+
+        var vehicle = await _vehicleRepository.FindOneVehicleByLicencePlate(
+            createParkingHistoryDto.LicensePlate
+            );
+
+        if (vehicle == null)
+        {
+            throw new KeyNotFoundException("Vehicle not found");
+        }
+
+        var parkingHistoryOpen = await _parkingHistoryRepository.FindOneParkingHistoryOpen(
+            vehicle.Id,
+            parkingLot.Id
+        );
+
+        if (parkingHistoryOpen == null)
+        {
+            if (vehicle.IsParked)
+            {
+                throw new BadHttpRequestException(
+                    "Unable to Register Entry, the license plate already exists in this or another parking lot."
+                );
+            }
+
+            throw new BadHttpRequestException(
+                "Unable to Check Out, there is no license plate in the parking lot."
+            );
+        }
+
+        parkingHistoryOpen.CheckOutDate = DateTime.UtcNow;
+
+        var updatedParkingHistory = await _parkingHistoryRepository.UpdateTimeAndCostInParkingHistory(
+                parkingLot.CostPerHour, 
+                parkingHistoryOpen
+            );
+
+        vehicle.IsParked = false;
+
+        await _vehicleRepository.UpdateVehicle(vehicle);
+
+        parkingLot.FreeSpaces += 1;
+
+        await _parkingLotRepository.UpdatedParkingLot(parkingLot);
+
+        return updatedParkingHistory;
     }
 }

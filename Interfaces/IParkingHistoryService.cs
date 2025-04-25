@@ -9,4 +9,6 @@ public interface IParkingHistoryService
         CreateParkingHistoryDto createParkingHistoryDto,
         int partnerId
         );
+
+    Task<ParkingHistory> CloseParkingHistory(CreateParkingHistoryDto createParkingHistoryDto);
 }

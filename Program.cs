@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
 using ParkingApi.Mappings.Users;
 using ParkingApi.Mappings.ParkingsLot;
+using ParkingApi.Mappings.ParkingHistories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -107,6 +108,7 @@ builder.Services.AddAutoMapper(cfg => {
     cfg.AddProfile<CreateUserMapping>();
     cfg.AddProfile<CreateParkingLotMapping>();
     cfg.AddProfile<ParkingLotMapping>();
+    cfg.AddProfile<ParkingHistoryMapping>();
 });
 
 var app = builder.Build();
