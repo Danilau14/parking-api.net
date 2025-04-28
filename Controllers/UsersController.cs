@@ -49,10 +49,11 @@ public class UsersController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(new
+            throw new EipexException(new ErrorResponse
             {
                 Message = ex.Message,
-            }
+                ErrorCode = "EMAIL_FAILED"
+            }, HttpStatusCode.BadRequest
            );
         } 
     }

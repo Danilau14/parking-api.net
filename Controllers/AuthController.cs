@@ -23,7 +23,12 @@ public class AuthController : ControllerBase
 
         if (token == null)
         {
-            return Unauthorized(new { message = "Credenciales inválidas" });
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = "Invalid Credentials",
+                    ErrorCode = "LOGIN_INVALID"
+                }, HttpStatusCode.BadRequest
+            );
         }
 
         return Ok(new { token });
@@ -33,7 +38,14 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Logout()
     {
         var bearerToken  =  Request.Headers.Authorization.ToString();
-        if (null == bearerToken) return BadRequest("No token provided");
+        if (null == bearerToken) {
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = "No token provided",
+                    ErrorCode = "LOGOUT_INVALID"
+                }, HttpStatusCode.BadRequest
+            );
+        }
 
         var jwt = bearerToken.Split(' ')[1];
 
@@ -41,7 +53,14 @@ public class AuthController : ControllerBase
             new RevokedToken { Token = jwt }
             );
 
-        if (!result) return BadRequest("The token could not be revoked.");
+        if (!result) {
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = "The token could not be revoked.",
+                    ErrorCode = "LOGOUT_INVALID"
+                }, HttpStatusCode.BadRequest
+            );
+        } 
 
         return Ok("Logged out successfully");
      }

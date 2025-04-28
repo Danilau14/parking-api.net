@@ -34,9 +34,11 @@ public class ParkingHistoryService : IParkingHistoryService
 
         if (parkingLot == null)
         {
-            throw new UnauthorizedAccessException(
-                "This parking lot does not belong to the member"
-                );
+            throw new EipexException(new ErrorResponse
+            {
+                Message = "This parking lot does not belong to the member",
+                ErrorCode = "PARKING_LOT_INVALID"
+            }, HttpStatusCode.Unauthorized);
         }
 
         var vehicle = await _vehicleRepository.FindOneVehicleByLicencePlate(
@@ -53,11 +55,13 @@ public class ParkingHistoryService : IParkingHistoryService
 
         if (vehicle.IsParked)
         {
-            throw new BadHttpRequestException(
-                "Unable to Register Entry, the license plate already exists in this or another parking lot."
-                );
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = "Unable to Register Entry, the license plate already exists in this or another parking lot.",
+                    ErrorCode = "VEHICLE_INVALID"
+                }, HttpStatusCode.Unauthorized
+            );
         }
-
         var newParkingHistory = await this.CreateParkingHistoryForExistingVehicle(
                     vehicle,
                     parkingLot
@@ -207,14 +211,20 @@ public class ParkingHistoryService : IParkingHistoryService
         {
             if (vehicle.IsParked)
             {
-                throw new BadHttpRequestException(
-                    "Unable to Register Entry, the license plate already exists in this or another parking lot."
+                throw new EipexException(new ErrorResponse
+                    {
+                        Message = "Unable to Register Entry, the license plate already exists in this or another parking lot.",
+                        ErrorCode = "VEHICLE_INVALID"
+                    }, HttpStatusCode.BadRequest
                 );
+          
             }
-
-            throw new BadHttpRequestException(
-                "Unable to Check Out, there is no license plate in the parking lot."
-            );
+                throw new EipexException(new ErrorResponse
+                    {
+                        Message = "Unable to Check Out, there is no license plate in the parking lot.",
+                        ErrorCode = "VEHICLE_INVALID"
+                    }, HttpStatusCode.BadRequest
+                );
         }
 
         parkingHistoryOpen.CheckOutDate = DateTime.UtcNow;

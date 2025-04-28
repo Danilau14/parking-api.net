@@ -56,7 +56,11 @@ public class ParkingHistoryRepository : BaseRepository<ParkingHistory>, IParking
     {
         if (page < 1 || limit < 1)
         {
-            throw new ArgumentException("Page and limit must be greater than 0.");
+            throw new EipexException(new ErrorResponse
+            {
+                Message = "Page and limit must be greater than 0.",
+                ErrorCode = "PAGE_LIMIT_INVALID"
+            }, HttpStatusCode.BadRequest);
         }
 
         var query = _dbSet.Include(history => history.Vehicle)
@@ -96,5 +100,4 @@ public class ParkingHistoryRepository : BaseRepository<ParkingHistory>, IParking
 
         return (result, totalCount);
     }
-
 }

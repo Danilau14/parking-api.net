@@ -1,8 +1,15 @@
+using Microsoft.Extensions.Options;
+using ParkingApi.Core.Global;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers( options =>
+{
+    options.Filters.Add<GlobalExceptionFilter>();
+}
+);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.SwaggerWithBearerToken();

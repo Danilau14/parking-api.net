@@ -13,10 +13,12 @@ global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.Filters;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Options;
 global using Microsoft.IdentityModel.Tokens;
 global using Microsoft.OpenApi.Models;
+
 
 // AutoMapper
 global using AutoMapper;
@@ -25,10 +27,12 @@ global using AutoMapper;
 global using ParkingApi.Core;
 global using ParkingApi.Data;
 global using ParkingApi.Dto.Email;
+global using ParkingApi.Dto.Error;
 global using ParkingApi.Dto.Pagination;
 global using ParkingApi.Dto.ParkingHistory;
 global using ParkingApi.Dto.ParkingsLot;
 global using ParkingApi.Dto.Users;
+global using ParkingApi.Exceptions;
 global using ParkingApi.Extensions;
 global using ParkingApi.Interfaces;
 global using ParkingApi.Mappings.ParkingHistories;

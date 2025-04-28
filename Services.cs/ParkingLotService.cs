@@ -21,7 +21,12 @@ public class ParkingLotService : IParkingLotService
             var partnerExist = await _userRepository.GetByIdAsync(parkingLot.UserId.Value);
             if (null == partnerExist)
             {
-                throw new KeyNotFoundException("Partner not found");
+                throw new EipexException(new ErrorResponse
+                {
+                    Message = "Partner not found",
+                    ErrorCode = "PARTNER_INVALID"
+                }, HttpStatusCode.NotFound
+);
             }
         }
 
