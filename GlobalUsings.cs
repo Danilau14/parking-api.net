@@ -22,12 +22,14 @@ global using Microsoft.OpenApi.Models;
 global using AutoMapper;
 
 // ParkingApi - Data, Models, DTOs, Mappings, Repositories, Services, Interfaces
+global using ParkingApi.Core;
 global using ParkingApi.Data;
 global using ParkingApi.Dto.Email;
 global using ParkingApi.Dto.Pagination;
 global using ParkingApi.Dto.ParkingHistory;
 global using ParkingApi.Dto.ParkingsLot;
 global using ParkingApi.Dto.Users;
+global using ParkingApi.Extensions;
 global using ParkingApi.Interfaces;
 global using ParkingApi.Mappings.ParkingHistories;
 global using ParkingApi.Mappings.ParkingsLot;
