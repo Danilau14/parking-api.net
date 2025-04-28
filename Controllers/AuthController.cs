@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
-using ParkingApi.Interfaces;
-using ParkingApi.Models;
-using ParkingApi.Dto.User;
-
-namespace ParkingApi.Controllers;
+﻿namespace ParkingApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

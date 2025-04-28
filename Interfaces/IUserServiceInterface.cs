@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using ParkingApi.Models;
-
-namespace ParkingApi.Interfaces;
+﻿namespace ParkingApi.Interfaces;
 
 public interface IUserServiceInterface
 {

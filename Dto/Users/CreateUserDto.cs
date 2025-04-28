@@ -1,7 +1,4 @@
-﻿using ParkingApi.Models.Enums;
-using System.ComponentModel.DataAnnotations;
-
-namespace ParkingApi.Dto.User;
+﻿namespace ParkingApi.Dto.Users;
 
 public class CreateUserDto
 {

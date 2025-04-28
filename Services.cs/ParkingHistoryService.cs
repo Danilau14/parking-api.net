@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
-using ParkingApi.Dto.ParkingHistory;
-using ParkingApi.Interfaces;
-using ParkingApi.Models;
-
-namespace ParkingApi.Services.cs;
+﻿namespace ParkingApi.Services.cs;
 
 public class ParkingHistoryService : IParkingHistoryService
 {

@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ParkingApi.Models;
-
-namespace ParkingApi.Data;
+﻿namespace ParkingApi.Data;
 
 public class ApplicationDbContext : DbContext
 {

@@ -1,11 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
-using ParkingApi.Data;
-using ParkingApi.Interfaces;
-using ParkingApi.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace ParkingApi.Repositories;
+﻿namespace ParkingApi.Repositories;
 
 public class ParkingHistoryRepository : BaseRepository<ParkingHistory>, IParkingHistoryRepository
 {

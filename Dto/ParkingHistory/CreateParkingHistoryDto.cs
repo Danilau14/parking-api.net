@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ParkingApi.Dto.ParkingHistory;
+﻿namespace ParkingApi.Dto.ParkingHistory;
 
 public class CreateParkingHistoryDto
 {

@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using ParkingApi.Dto.User;
-using ParkingApi.Models;
-
-namespace ParkingApi.Mappings.Users;
+﻿namespace ParkingApi.Mappings.Users;
 
 public class CreateUserMapping : Profile
 {

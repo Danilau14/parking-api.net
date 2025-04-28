@@ -1,7 +1,4 @@
-﻿using ParkingApi.Data;
-using ParkingApi.Interfaces;
-
-namespace ParkingApi.Repositories;
+﻿namespace ParkingApi.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {

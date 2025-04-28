@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ParkingApi.Dto.Email
+﻿namespace ParkingApi.Dto.Email
 {
     public class EmailForUserDto
     {

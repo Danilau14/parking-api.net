@@ -1,11 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using ParkingApi.Interfaces;
-using ParkingApi.Models;
-
-namespace ParkingApi.Services.cs;
+﻿namespace ParkingApi.Services.cs;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {

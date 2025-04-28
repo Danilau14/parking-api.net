@@ -1,9 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ParkingApi.Data;
-using ParkingApi.Interfaces;
-using ParkingApi.Models;
-
-namespace ParkingApi.Repositories;
+﻿namespace ParkingApi.Repositories;
 
 public class RevokedTokenRepository : BaseRepository<RevokedToken>, IRevokedTokenRepository
 {

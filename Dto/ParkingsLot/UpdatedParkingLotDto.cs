@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ParkingApi.Dto.ParkingsLot;
+﻿namespace ParkingApi.Dto.ParkingsLot;
 
 public class UpdatedParkingLotDto 
 {

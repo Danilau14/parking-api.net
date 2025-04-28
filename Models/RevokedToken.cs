@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-namespace ParkingApi.Models;
+﻿namespace ParkingApi.Models;
 
 public class RevokedToken
 {

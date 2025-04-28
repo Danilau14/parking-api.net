@@ -1,6 +1,4 @@
 ﻿namespace ParkingApi.Dto.Pagination;
-using System.ComponentModel.DataAnnotations;
-
 
 public class PaginationDto
 {

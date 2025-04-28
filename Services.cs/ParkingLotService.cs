@@ -1,8 +1,4 @@
-﻿using ParkingApi.Interfaces;
-using ParkingApi.Models;
-using ParkingApi.Repositories;
-
-namespace ParkingApi.Services.cs;
+﻿namespace ParkingApi.Services.cs;
 
 public class ParkingLotService : IParkingLotService
 {

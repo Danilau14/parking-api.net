@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
-
-namespace ParkingApi.Models;
+﻿namespace ParkingApi.Models;
 
 public class ParkingLot
 {

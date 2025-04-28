@@ -1,6 +1,4 @@
-﻿using ParkingApi.Models;
-
-namespace ParkingApi.Interfaces;
+﻿namespace ParkingApi.Interfaces;
 
 public interface IParkingLotRepository : IBaseRepository<ParkingLot>
 {

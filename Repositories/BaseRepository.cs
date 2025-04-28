@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ParkingApi.Interfaces;
-
-namespace ParkingApi.Repositories;
+﻿namespace ParkingApi.Repositories;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {

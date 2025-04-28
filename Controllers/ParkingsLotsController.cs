@@ -1,13 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using ParkingApi.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using ParkingApi.Models;
-using ParkingApi.Dto.ParkingsLot;
-using Microsoft.AspNetCore.Http.HttpResults;
-using ParkingApi.Dto.Pagination;
-
-namespace ParkingApi.Controllers;
+﻿namespace ParkingApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

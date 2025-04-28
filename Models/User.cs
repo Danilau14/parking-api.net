@@ -1,9 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
-using ParkingApi.Models.Enums;
-
-namespace ParkingApi.Models;
+﻿namespace ParkingApi.Models;
 
 public class User
 {

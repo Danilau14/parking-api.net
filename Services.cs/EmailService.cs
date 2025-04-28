@@ -1,10 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using ParkingApi.Interfaces;
-using ParkingApi.Models;
-using System.Net;
-using System.Net.Mail;
-
-namespace ParkingApi.Services.cs;
+﻿namespace ParkingApi.Services.cs;
 
 public class EmailService : IEmailService
 {

@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using ParkingApi.Dto.ParkingsLot;
-using ParkingApi.Models;
-
-namespace ParkingApi.Mappings.ParkingsLot;
+﻿namespace ParkingApi.Mappings.ParkingsLot;
 
 public class CreateParkingLotMapping : Profile
 {

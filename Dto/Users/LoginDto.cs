@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace ParkingApi.Dto.User;
+﻿namespace ParkingApi.Dto.Users;
 
 public class LoginDto
 {

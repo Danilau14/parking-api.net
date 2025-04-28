@@ -1,6 +1,4 @@
-﻿using ParkingApi.Data;
-
-namespace ParkingApi.Interfaces;
+﻿namespace ParkingApi.Interfaces;
 
 public interface IUnitOfWork
 {

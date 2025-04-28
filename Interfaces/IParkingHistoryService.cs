@@ -1,7 +1,4 @@
-﻿using ParkingApi.Dto.ParkingHistory;
-using ParkingApi.Models;
-
-namespace ParkingApi.Interfaces;
+﻿namespace ParkingApi.Interfaces;
 
 public interface IParkingHistoryService
 {

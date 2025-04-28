@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using ParkingApi.Interfaces;
-using ParkingApi.Models;
-
-namespace ParkingApi.Services.cs;
+﻿namespace ParkingApi.Services.cs;
 
 public class UserService : IUserServiceInterface
 {
