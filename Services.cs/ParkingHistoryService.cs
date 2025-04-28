@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using ParkingApi.Dto.ParkingHistory;
 using ParkingApi.Interfaces;
 using ParkingApi.Models;
@@ -10,16 +11,22 @@ public class ParkingHistoryService : IParkingHistoryService
     private readonly IParkingLotRepository _parkingLotRepository;
     private readonly IVehicleRepository _vehicleRepository;
     private readonly IParkingHistoryRepository _parkingHistoryRepository;
+    private readonly IEmailService _emailService;
+    private readonly ILogger<ParkingHistoryService> _logger;
 
     public ParkingHistoryService(
         IParkingLotRepository parkingLotRepository,
         IVehicleRepository vehicleRepository,
-        IParkingHistoryRepository parkingHistoryRepository
+        IParkingHistoryRepository parkingHistoryRepository,
+        IEmailService emailService,
+        ILogger<ParkingHistoryService> logger
         )
     {
         _parkingLotRepository = parkingLotRepository;
         _vehicleRepository = vehicleRepository;
         _parkingHistoryRepository = parkingHistoryRepository;
+        _emailService = emailService;
+        _logger = logger;
     }
 
     public async Task<ParkingHistory> CreateParkingHistory(
@@ -62,6 +69,23 @@ public class ParkingHistoryService : IParkingHistoryService
                     parkingLot
                 );
 
+
+
+        if (parkingLot.User?.Email != null)
+        {
+            try
+            {
+                await _emailService.SendEmailAsync(
+                        parkingLot.User.Email,
+                        "Vehicle in Parking lot",
+                        $"Vehicle with LicensePlate {vehicle.LicensePlate} in ParkingLot {parkingLot.Id}"
+                    );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending email to {Recipient}", parkingLot.User.Email);
+            }
+        }
         return newParkingHistory;
     }
 
@@ -97,6 +121,22 @@ public class ParkingHistoryService : IParkingHistoryService
         };
 
         var parkingHistorySaved = await _parkingHistoryRepository.CreateParkingHistory(newParkingHistory);
+
+        if (parkingLot.User?.Email != null)
+        {
+            try
+            {
+                await _emailService.SendEmailAsync(
+                        parkingLot.User.Email,
+                        "Vehicle in Parking lot",
+                        $"Vehicle with LicensePlate {newVehicle.LicensePlate} in ParkingLot {parkingLot.Id}"
+                    );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending email to {Recipient}", parkingLot.User.Email);
+            }
+        }
 
         return parkingHistorySaved;
     }

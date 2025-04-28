@@ -16,8 +16,8 @@ public interface IParkingHistoryRepository : IBaseRepository<ParkingHistory>
     Task<ParkingHistory> UpdateParkingHistory(ParkingHistory parkingHistory);
 
     Task<(List<ParkingHistory>, int)> FindVehiclesByParkingLot(
-        int page = 1,
-        int limit = 10,
-        int? parkingLotId = null
+            int page = 1,
+            int limit = 10,
+            int? parkingLotId = null
        );
 }

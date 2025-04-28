@@ -114,7 +114,7 @@ builder.Services.AddAutoMapper(cfg => {
 });
 
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-//builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 var app = builder.Build();
 

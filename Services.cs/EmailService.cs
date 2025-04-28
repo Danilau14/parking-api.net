@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
+using ParkingApi.Interfaces;
 using ParkingApi.Models;
 using System.Net;
 using System.Net.Mail;
 
 namespace ParkingApi.Services.cs;
 
-public class EmailService
+public class EmailService : IEmailService
 {
     private readonly EmailSettings _emailSettings;
 
@@ -28,7 +29,7 @@ public class EmailService
 
         using var smtp = new SmtpClient(_emailSettings.SmtpServer, _emailSettings.Port)
         {
-            Credentials = new NetworkCredential(_emailSettings.SenderEmail, _emailSettings.Password),
+            Credentials = new NetworkCredential(_emailSettings.SenderUser, _emailSettings.Password),
             EnableSsl = true
         };
 

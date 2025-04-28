@@ -18,7 +18,7 @@ public class ParkingLotRepository : BaseRepository<ParkingLot>, IParkingLotRepos
 
     public async Task<ParkingLot?> FindByParkingLotAndUser(int parkingLotId, int partnerId)
     {
-        var parkingLot = await _dbSet.FirstOrDefaultAsync(
+        var parkingLot = await _dbSet.Include(p => p.User).FirstOrDefaultAsync(
             p => p.Id == parkingLotId && p.UserId == partnerId
             );
 

@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ParkingApi.Dto.Pagination;
 using ParkingApi.Dto.ParkingHistory;
-using ParkingApi.Dto.ParkingsLot;
 using ParkingApi.Interfaces;
-using ParkingApi.Repositories;
 
 namespace ParkingApi.Controllers;
 
