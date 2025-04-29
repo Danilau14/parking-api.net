@@ -37,7 +37,7 @@ public class ParkingHistoryService : IParkingHistoryService
             throw new EipexException(new ErrorResponse
             {
                 Message = "This parking lot does not belong to the member",
-                ErrorCode = "PARKING_LOT_INVALID"
+                ErrorCode = ErrorsCodeConstants.PARKINGLOT_INVALID
             }, HttpStatusCode.Unauthorized);
         }
 
@@ -58,7 +58,7 @@ public class ParkingHistoryService : IParkingHistoryService
             throw new EipexException(new ErrorResponse
                 {
                     Message = "Unable to Register Entry, the license plate already exists in this or another parking lot.",
-                    ErrorCode = "VEHICLE_INVALID"
+                    ErrorCode = ErrorsCodeConstants.VEHICLE_INVALID
                 }, HttpStatusCode.Unauthorized
             );
         }
@@ -146,9 +146,12 @@ public class ParkingHistoryService : IParkingHistoryService
     {
         if (parkingLot.FreeSpaces == 0)
         {
-            throw new BadHttpRequestException(
-                   "Parking lot full"
-                   );
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = "Parking Lot full",
+                    ErrorCode = ErrorsCodeConstants.PARKINGLOT_INVALID
+                }, HttpStatusCode.BadRequest
+            );
         }
 
         var parkingHistoryOpen = await _parkingHistoryRepository.FindOneParkingHistoryOpen(
@@ -157,9 +160,12 @@ public class ParkingHistoryService : IParkingHistoryService
             );
 
         if (null == parkingHistoryOpen && vehicle.IsParked) {
-            throw new BadHttpRequestException(
-               "Vehicle in other Parking lot"
-               );
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = "Vehicle in other Parking lot",
+                    ErrorCode = ErrorsCodeConstants.VEHICLE_INVALID
+                }, HttpStatusCode.BadRequest
+            );
         }
 
         vehicle.IsParked = true;
@@ -190,7 +196,12 @@ public class ParkingHistoryService : IParkingHistoryService
 
         if (parkingLot == null)
         {
-            throw new KeyNotFoundException("ParkingLot not found");
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = "ParkingLot not found",
+                    ErrorCode = ErrorsCodeConstants.PARKINGLOT_NOT_FOUND
+                }, HttpStatusCode.NotFound
+            );
         }
 
         var vehicle = await _vehicleRepository.FindOneVehicleByLicencePlate(
@@ -199,7 +210,12 @@ public class ParkingHistoryService : IParkingHistoryService
 
         if (vehicle == null)
         {
-            throw new KeyNotFoundException("Vehicle not found");
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = "Vehicle not found",
+                    ErrorCode = ErrorsCodeConstants.VEHICLE_NOT_FOUND
+                }, HttpStatusCode.NotFound
+            );
         }
 
         var parkingHistoryOpen = await _parkingHistoryRepository.FindOneParkingHistoryOpen(
@@ -214,7 +230,7 @@ public class ParkingHistoryService : IParkingHistoryService
                 throw new EipexException(new ErrorResponse
                     {
                         Message = "Unable to Register Entry, the license plate already exists in this or another parking lot.",
-                        ErrorCode = "VEHICLE_INVALID"
+                        ErrorCode = ErrorsCodeConstants.VEHICLE_INVALID
                     }, HttpStatusCode.BadRequest
                 );
           
@@ -222,7 +238,7 @@ public class ParkingHistoryService : IParkingHistoryService
                 throw new EipexException(new ErrorResponse
                     {
                         Message = "Unable to Check Out, there is no license plate in the parking lot.",
-                        ErrorCode = "VEHICLE_INVALID"
+                        ErrorCode = ErrorsCodeConstants.VEHICLE_INVALID
                     }, HttpStatusCode.BadRequest
                 );
         }

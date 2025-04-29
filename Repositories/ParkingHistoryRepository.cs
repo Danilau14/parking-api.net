@@ -45,6 +45,12 @@ public class ParkingHistoryRepository : BaseRepository<ParkingHistory>, IParking
             
         }
 
+        throw new EipexException(new ErrorResponse
+        {
+            Message = "Dates must be different null",
+            ErrorCode = ErrorsCodeConstants.PARKINGHISTORY_INVALID
+        }, HttpStatusCode.BadRequest);
+
         throw new BadHttpRequestException("Dates must be different null");
     }
 
@@ -59,7 +65,7 @@ public class ParkingHistoryRepository : BaseRepository<ParkingHistory>, IParking
             throw new EipexException(new ErrorResponse
             {
                 Message = "Page and limit must be greater than 0.",
-                ErrorCode = "PAGE_LIMIT_INVALID"
+                ErrorCode = ErrorsCodeConstants.PAGE_LIMIT_INVALID
             }, HttpStatusCode.BadRequest);
         }
 

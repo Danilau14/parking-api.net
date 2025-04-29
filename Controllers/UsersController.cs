@@ -41,20 +41,16 @@ public class UsersController : ControllerBase
                     emailForUser.Message
                 );
 
-            return Ok( new
-                {
-                    Message = "Send email",
-                }
-            );
+            return Ok( new { Message = "Send email" });
         }
         catch (Exception ex)
         {
             throw new EipexException(new ErrorResponse
-            {
-                Message = ex.Message,
-                ErrorCode = "EMAIL_FAILED"
-            }, HttpStatusCode.BadRequest
-           );
+                {
+                    Message = ex.Message,
+                    ErrorCode = ErrorsCodeConstants.EMAIL_FAILED
+                }, HttpStatusCode.BadRequest
+            );
         } 
     }
 }

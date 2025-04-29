@@ -24,7 +24,7 @@ public class ParkingLotService : IParkingLotService
                 throw new EipexException(new ErrorResponse
                 {
                     Message = "Partner not found",
-                    ErrorCode = "PARTNER_INVALID"
+                    ErrorCode = ErrorsCodeConstants.PARTNER_INVALID
                 }, HttpStatusCode.NotFound
 );
             }

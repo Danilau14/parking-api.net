@@ -38,11 +38,21 @@ public class ParkingsLotsController : ControllerBase
         }
         catch (KeyNotFoundException ex)
         {
-            return NotFound(new { message = ex.Message });
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = ex.Message,
+                    ErrorCode = ErrorsCodeConstants.PARKING_NOT_SAVE
+            }, HttpStatusCode.NotFound
+            );
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return BadRequest(new { message = "Error Saving Parking Lot"});
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = ex.Message,
+                    ErrorCode = ErrorsCodeConstants.PARKING_NOT_SAVE
+            }, HttpStatusCode.BadRequest
+            );
         }
     }
 
@@ -54,7 +64,12 @@ public class ParkingsLotsController : ControllerBase
 
         if (parkingLot == null)
         {
-            return NotFound(new { message = "Parking dont found" });
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = "Parking dont found",
+                    ErrorCode = ErrorsCodeConstants.PARKINGLOT_NOT_FOUND
+                }, HttpStatusCode.NotFound
+            );
         }
 
         var dto = _mapper.Map<ParkingLotDto>(parkingLot);
@@ -64,22 +79,32 @@ public class ParkingsLotsController : ControllerBase
 
     [HttpPatch("{id}")]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<IActionResult> UpdatedParkingLot(int id, [FromBody] UpdatedParkingLotDto updatedParkingLotDto)
+    public async Task<IActionResult> UpdatedParkingLot( int id, [FromBody] UpdatedParkingLotDto updatedParkingLotDto)
     {
         var parkingLot = await _parkingLotRepository.GetByIdAsync(id);
 
         if (parkingLot == null)
         {
-            return NotFound(new { message = "Parking dont found" });
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = "Parking dont found",
+                    ErrorCode = ErrorsCodeConstants.PARKINGLOT_NOT_FOUND
+                }, HttpStatusCode.NotFound
+            );
         }
 
-        if(updatedParkingLotDto.PartnerId.HasValue)
+        if (updatedParkingLotDto.PartnerId.HasValue)
         {
             var partner = await _userRepository.GetByIdAsync(updatedParkingLotDto.PartnerId.Value);
 
             if (partner == null)
             {
-                return NotFound(new { message = "Invalid PartnerId" });
+                throw new EipexException(new ErrorResponse
+                    {
+                        Message = "Invalid PartnerId",
+                        ErrorCode = ErrorsCodeConstants.PARKINGLOT_INVALID
+                    }, HttpStatusCode.NotFound
+                );
             }
 
             parkingLot.User = partner;
@@ -98,7 +123,12 @@ public class ParkingsLotsController : ControllerBase
             {
                 if (parkingLot.FreeSpaces == 0 || parkingLot.Size - parkingLot.FreeSpaces > updatedParkingLotDto.Size.Value)
                 {
-                    return BadRequest(new { message = "The size of the parking lot cannot be less than the number of current vehicles." });
+                    throw new EipexException(new ErrorResponse
+                        {
+                            Message = "The size of the parking lot cannot be less than the number of current vehicles.",
+                            ErrorCode = ErrorsCodeConstants.PARKINGLOT_INVALID
+                    }, HttpStatusCode.BadRequest
+                    );
                 }
 
                 parkingLot.FreeSpaces = parkingLot.FreeSpaces - (parkingLot.Size - updatedParkingLotDto.Size.Value);
@@ -126,7 +156,12 @@ public class ParkingsLotsController : ControllerBase
 
         if (parkingLot == null)
         {
-            return NotFound(new { message = "Parking dont found" });
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = "Parking dont found",
+                    ErrorCode = ErrorsCodeConstants.PARKINGLOT_INVALID
+                }, HttpStatusCode.BadRequest
+            );        
         }
 
         parkingLot.RecycleBin = true;

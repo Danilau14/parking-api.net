@@ -25,7 +25,7 @@ public class ParkingHistoriesController : ControllerBase
     {
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-        var parkingHistory = await _parkingHistoryService.CreateParkingHistory(parkingHistoryDto, userId);
+        await _parkingHistoryService.CreateParkingHistory(parkingHistoryDto, userId);
 
         return Created();
     }

@@ -18,7 +18,7 @@ public class GlobalExceptionFilter : IExceptionFilter
             statusCode = (int)HttpStatusCode.InternalServerError;
             response = new ErrorResponse
             {
-                Message = "An unexpected error occurred.",
+                Message = context.Exception.Message,
                 ErrorCode = "UNHANDLED_EXCEPTION"
             };
         }

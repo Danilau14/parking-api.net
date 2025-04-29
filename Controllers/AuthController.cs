@@ -26,7 +26,7 @@ public class AuthController : ControllerBase
             throw new EipexException(new ErrorResponse
                 {
                     Message = "Invalid Credentials",
-                    ErrorCode = "LOGIN_INVALID"
+                    ErrorCode = ErrorsCodeConstants.LOGIN_INVALID
                 }, HttpStatusCode.BadRequest
             );
         }
@@ -42,7 +42,7 @@ public class AuthController : ControllerBase
             throw new EipexException(new ErrorResponse
                 {
                     Message = "No token provided",
-                    ErrorCode = "LOGOUT_INVALID"
+                    ErrorCode = ErrorsCodeConstants.LOGOUT_INVALID
                 }, HttpStatusCode.BadRequest
             );
         }
@@ -57,7 +57,7 @@ public class AuthController : ControllerBase
             throw new EipexException(new ErrorResponse
                 {
                     Message = "The token could not be revoked.",
-                    ErrorCode = "LOGOUT_INVALID"
+                    ErrorCode = ErrorsCodeConstants.LOGOUT_INVALID
                 }, HttpStatusCode.BadRequest
             );
         } 

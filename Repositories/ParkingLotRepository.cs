@@ -14,7 +14,8 @@ public class ParkingLotRepository : BaseRepository<ParkingLot>, IParkingLotRepos
     public async Task<ParkingLot?> FindByParkingLotAndUser(int parkingLotId, int partnerId)
     {
         var parkingLot = await _dbSet.Include(p => p.User).FirstOrDefaultAsync(
-            p => p.Id == parkingLotId && p.UserId == partnerId
+                p => p.Id == parkingLotId 
+                && p.UserId == partnerId
             );
 
         return parkingLot;
@@ -35,7 +36,11 @@ public class ParkingLotRepository : BaseRepository<ParkingLot>, IParkingLotRepos
     {
         if (page < 1 || limit < 1)
         {
-            throw new ArgumentException("Page and limit must be greater than 0.");
+            throw new EipexException(new ErrorResponse
+            {
+                Message = "Page and limit must be greater than 0.",
+                ErrorCode = ErrorsCodeConstants.PAGE_LIMIT_INVALID
+            }, HttpStatusCode.BadRequest);
         }
 
         var query = _dbSet.Include(pl => pl.User) 
