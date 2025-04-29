@@ -1,4 +1,6 @@
-﻿namespace ParkingApi.Extensions;
+﻿using System.Reflection;
+
+namespace ParkingApi.Extensions;
 
 public static class SwaggerGenWithBearer
 {
@@ -31,6 +33,23 @@ public static class SwaggerGenWithBearer
                 }
             });
 
+            var info = new OpenApiInfo()
+            {
+                Title = "ParqueaderoAPI",
+                Version = "v1",
+                Description = "API Rest para el control de vehículos por parqueaderos.",
+                Contact = new OpenApiContact()
+                {
+                    Name = "Laura Daniela Pumarejo Garcia",
+                    Email = "lauradanielapg97@gmail.com",
+                }
+
+            };
+
+            options.SwaggerDoc("v1", info);
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            options.IncludeXmlComments(xmlPath);
         });
     }        
 }
