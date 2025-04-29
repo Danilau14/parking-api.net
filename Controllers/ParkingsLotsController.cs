@@ -1,5 +1,15 @@
 ﻿namespace ParkingApi.Controllers;
 
+/// <summary>
+/// Controlador que gestiona los parqueaderos.
+/// </summary>
+/// <remarks>
+/// Todos los endpoints de este controlador requieren autenticación mediante token JWT.
+/// Incluye el siguiente header en cada solicitud:
+/// <code>
+/// Authorization: Bearer {token}
+/// </code>
+/// </remarks>
 [Route("api/[controller]")]
 [ApiController]
 public class ParkingsLotsController : ControllerBase
@@ -14,7 +24,7 @@ public class ParkingsLotsController : ControllerBase
         IMapper mapper,
         IParkingLotService parkingLotService,   
         IUserRepository userRepository
-        )
+    )
     {
         _parkingLotRepository = parkingLotRepository;
         _mapper = mapper;
@@ -22,9 +32,25 @@ public class ParkingsLotsController : ControllerBase
         _userRepository = userRepository;
     }
 
+    /// <summary>
+    /// Crea un parqueadero con o sin socio.
+    /// </summary>
+    /// <param name="createParkingLotDto">
+    /// DTO contiene la capacidad del parqueadero, el costo por hora y el socio
+    /// </param>
+    /// <returns>
+    /// Un objeto con las propidades del parqueadeo que acaba de crearse
+    /// </returns>
+    /// <response code="200">Devuelve el objeto con las propiedades del paqueadero.</response>
+    /// <response code="401">Si el usuario no está autenticado.</response>
+    /// <response code="403">Si el usuario no tiene permisos de administrador.</response>
+    /// <response code="404">Si es asociado un partnerId que no existe.</response>
+    /// <exception cref="EipexException">
+    /// Se lanza si ocurren errores al crear un parqueadero.
+    /// </exception>
     [HttpPost]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<IActionResult> CrearteParkinLot([FromBody] CreateParkingLotDto createParkingLotDto)
+    public async Task<IActionResult> CrearteParkingLot([FromBody] CreateParkingLotDto createParkingLotDto)
     {
         var parkingLot = _mapper.Map<ParkingLot>(createParkingLotDto);
 
@@ -56,6 +82,22 @@ public class ParkingsLotsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Obtiene un parqueadero por Id.
+    /// </summary>
+    /// <param name="id">
+    /// Es el ID del parqueadero
+    /// </param>
+    /// <returns>
+    /// Un objeto con las propidades del parqueadero asociado al ID
+    /// </returns>
+    /// <response code="200">Devuelve un objeto con las propiedaes del parquedero.</response>
+    /// <response code="401">Si el usuario no está autenticado.</response>
+    /// <response code="403">Si el usuario no tiene permisos de administrador.</response>
+    /// <response code="404">No se encuentra un parqueadero asociado al ID.</response>
+    /// <exception cref="EipexException">
+    /// Se lanza si ocurren errores al buscar el parqueadero.
+    /// </exception>
     [HttpGet("{id}")]
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> FindOneParkingLot(int id)
@@ -77,6 +119,27 @@ public class ParkingsLotsController : ControllerBase
         return Ok(dto);
     }
 
+    /// <summary>
+    /// Actualiza un parqueadero existente.
+    /// </summary>
+    /// <param name="id">
+    /// Identificador único del parqueadero a actualizar. Se obtiene desde la ruta.
+    /// </param>
+    /// <param name="updatedParkingLotDto">
+    /// DTO que contiene los datos actualizables del parqueadero: capacidad, costo por hora y el ID del socio.
+    /// </param>
+    /// <returns>
+    /// Un objeto con las propiedades actualizadas del parqueadero.
+    /// </returns>
+    /// <response code="200">Devuelve el parqueadero actualizado.</response>
+    /// <response code="400">Si el DTO tiene datos inválidos</response>
+    /// <response code="401">Si el usuario no está autenticado.</response>
+    /// <response code="403">Si el usuario no tiene permisos de administrador.</response>
+    /// <response code="404">Si no existe un parqueadero con el ID proporcionado.</response>
+    /// <response code="409">No puede asociar una menor cantidad de espacios a los ocupados.</response>
+    /// <exception cref="EipexException">
+    /// Se lanza si ocurren errores al actualizar el parqueadero, como valores inválidos o entidades no encontradas.
+    /// </exception>
     [HttpPatch("{id}")]
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> UpdatedParkingLot( int id, [FromBody] UpdatedParkingLotDto updatedParkingLotDto)
@@ -126,8 +189,8 @@ public class ParkingsLotsController : ControllerBase
                     throw new EipexException(new ErrorResponse
                         {
                             Message = "The size of the parking lot cannot be less than the number of current vehicles.",
-                            ErrorCode = ErrorsCodeConstants.PARKINGLOT_INVALID
-                    }, HttpStatusCode.BadRequest
+                            ErrorCode = ErrorsCodeConstants.PARKINGLOT_CONFLICT
+                        }, HttpStatusCode.Conflict
                     );
                 }
 
@@ -148,6 +211,23 @@ public class ParkingsLotsController : ControllerBase
         return Ok(dto);
     }
 
+    /// <summary>
+    /// Remueve logicamente un paqueadero.
+    /// </summary>
+    /// <param name="id">
+    /// Identificador único del parqueadero a removerse. Se obtiene desde la ruta.
+    /// </param>
+    /// <returns>
+    /// Un objeto con las propiedades con la propiedad recycleBin en true.
+    /// </returns>
+    /// <response code="200">Devuelve el parquedero con la propiedad recycleBin en true..</response>
+    /// <response code="400">Si el DTO tiene datos inválidos</response>
+    /// <response code="401">Si el usuario no está autenticado.</response>
+    /// <response code="403">Si el usuario no tiene permisos de administrador.</response>
+    /// <response code="404">Si no existe un parqueadero con el ID proporcionado.</response>
+    /// <exception cref="EipexException">
+    /// Se lanza si ocurren errores al actualizar el parqueadero, como valores inválidos o entidades no encontradas.
+    /// </exception>
     [HttpDelete("{id}")]
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> RemoveParkingLot(int id)
@@ -159,8 +239,8 @@ public class ParkingsLotsController : ControllerBase
             throw new EipexException(new ErrorResponse
                 {
                     Message = "Parking dont found",
-                    ErrorCode = ErrorsCodeConstants.PARKINGLOT_INVALID
-                }, HttpStatusCode.BadRequest
+                    ErrorCode = ErrorsCodeConstants.PARKINGLOT_NOT_FOUND
+                }, HttpStatusCode.NotFound
             );        
         }
 
@@ -173,6 +253,19 @@ public class ParkingsLotsController : ControllerBase
         return Ok(dto);
     }
 
+    /// <summary>
+    /// Lista todos los parqueaderos.
+    /// </summary>
+    /// <param name="paginationDto">
+    /// DTO que contiene la página y el límite de resultados.
+    /// </param>
+    /// <returns>
+    /// Un objeto con la metadata de la paginación y los parqueaderos existentes
+    /// </returns>
+    /// <response code="200">Devuelve el listado de los parqueaderos.</response>
+    /// <response code="400">Si el DTO tiene datos inválidos</response>
+    /// <response code="401">Si el usuario no está autenticado.</response>
+    /// <response code="403">Si el usuario no tiene permisos de administrador.</response>
     [HttpGet("all")]
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> FindParkingsLot([FromQuery] PaginationDto paginationDto)
