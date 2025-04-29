@@ -23,6 +23,9 @@ global using Microsoft.OpenApi.Models;
 // AutoMapper
 global using AutoMapper;
 
+// RabbitMQ
+global using RabbitMQ.Client;
+
 // ParkingApi - Data, Models, DTOs, Mappings, Repositories, Services, Interfaces
 global using ParkingApi.Core;
 global using ParkingApi.Data;

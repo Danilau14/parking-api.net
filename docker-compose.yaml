@@ -11,3 +11,12 @@ services:
       POSTGRES_PASSWORD: "password"
     volumes:
       - ./postgresql:/var/lib/postgresql/data
+  rabbitmq:
+     image: rabbitmq:3-management
+     container_name: parking-mq
+     ports:
+      - "5672:5672" 
+      - "15672:15672"
+     environment:
+        RABBITMQ_DEFAULT_USER: "user"
+        RABBITMQ_DEFAULT_PASS: "password"
