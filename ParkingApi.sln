@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución",
 		docker-compose.yaml = docker-compose.yaml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditWorker", "..\AuditWorker\AuditWorker.csproj", "{898C6853-A631-4ABA-A9A4-D3EB1389271D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{86B03333-8844-4B1A-922D-E347176A925D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86B03333-8844-4B1A-922D-E347176A925D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86B03333-8844-4B1A-922D-E347176A925D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{898C6853-A631-4ABA-A9A4-D3EB1389271D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{898C6853-A631-4ABA-A9A4-D3EB1389271D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{898C6853-A631-4ABA-A9A4-D3EB1389271D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{898C6853-A631-4ABA-A9A4-D3EB1389271D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
