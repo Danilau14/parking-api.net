@@ -8,16 +8,19 @@ public class UsersController : ControllerBase
     private readonly IUserServiceInterface _userService;
     private readonly IEmailService _emailService;   
     private readonly IMapper _mapper;
+    private readonly IRabbitMQService _rabbitmqService;
 
     public UsersController(
         IUserServiceInterface userService, 
         IMapper mapper,
-        IEmailService emailService
-        )
+        IEmailService emailService,
+        IRabbitMQService rabbitmqService
+    )
     {
         _userService = userService;
         _mapper = mapper;
         _emailService = emailService;
+        _rabbitmqService = rabbitmqService;
     }
 
     /// <summary>
@@ -42,9 +45,31 @@ public class UsersController : ControllerBase
     {
         var user = _mapper.Map<User>(data);
 
-        await _userService.CreateUserAsync(user);
-      
-        return Ok("Usuario creado");
+        var message = new MessageDto
+        {
+            Entity = user.GetType().Name,
+            Action = Actions.CREATE,
+            State = true
+        };
+
+        try
+        {
+            await _userService.CreateUserAsync(user);
+            await _rabbitmqService.PublishMessage(message);
+
+            return Created();
+
+        } catch (Exception ex) {
+            message.Response = ex.Message;
+            message.State = false;
+            await _rabbitmqService.PublishMessage(message);
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = ex.Message,
+                    ErrorCode = ErrorsCodeConstants.USER_NOT_SAVE
+                }, HttpStatusCode.BadRequest
+            );
+        }
     }
 
     [HttpPost("send-email-partner")]

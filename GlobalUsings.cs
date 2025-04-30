@@ -7,6 +7,8 @@ global using System.Net;
 global using System.Net.Mail;
 global using System.Security.Claims;
 global using System.Text;
+global using System.Text.Json;
+
 
 // Microsoft
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -34,7 +36,9 @@ global using ParkingApi.Dto.Error;
 global using ParkingApi.Dto.Pagination;
 global using ParkingApi.Dto.ParkingHistory;
 global using ParkingApi.Dto.ParkingsLot;
+global using ParkingApi.Dto.QueueMessage;
 global using ParkingApi.Dto.Users;
+global using ParkingApi.Enums;
 global using ParkingApi.Exceptions;
 global using ParkingApi.Extensions;
 global using ParkingApi.Interfaces;
@@ -42,6 +46,5 @@ global using ParkingApi.Mappings.ParkingHistories;
 global using ParkingApi.Mappings.ParkingsLot;
 global using ParkingApi.Mappings.Users;
 global using ParkingApi.Models;
-global using ParkingApi.Models.Enums;
 global using ParkingApi.Repositories;
 global using ParkingApi.Services.cs;

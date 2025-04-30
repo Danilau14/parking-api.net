@@ -1,4 +1,6 @@
-﻿namespace ParkingApi.Models;
+﻿using ParkingApi.Enums;
+
+namespace ParkingApi.Models;
 
 public class User
 {

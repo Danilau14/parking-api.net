@@ -4,10 +4,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers( /*options =>
+builder.Services.AddControllers( options =>
 {
     options.Filters.Add<GlobalExceptionFilter>();
-}*/
+}
 );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -16,7 +16,7 @@ builder.Services.SwaggerWithBearerToken();
 builder.Services.ConfigureDbContext(builder.Configuration);
 
 builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
-builder.Services.AddSingleton<RabbitMQService>();
+builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

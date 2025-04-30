@@ -1,4 +1,6 @@
-﻿namespace ParkingApi.Extensions;
+﻿using ParkingApi.Enums;
+
+namespace ParkingApi.Extensions;
 
 public static class AuthorizationExtensions
 {

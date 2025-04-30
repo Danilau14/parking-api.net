@@ -12,7 +12,7 @@ public class RabbitMQController : ControllerBase
     }
 
     [HttpPost("publish")]
-    public async Task<IActionResult> PublishMessage([FromBody] string message)
+    public async Task<IActionResult> PublishMessage([FromBody] MessageDto message)
     {
         await _rabbitMQService.PublishMessage(message);
 

@@ -5,7 +5,7 @@ using RabbitMQ.Client.Events;
 
 namespace ParkingApi.Services.cs;
 
-public class RabbitMQService
+public class RabbitMQService : IRabbitMQService
 {
     private readonly RabbitMQSettings _rabbitMQSettings;
     private IConnection _connection;
@@ -33,7 +33,7 @@ public class RabbitMQService
         }
     }
 
-    public async Task PublishMessage(string message, string? queueName = null)
+    public async Task PublishMessage(MessageDto message, string? queueName = null)
     {
         await EnsureConnectionAndChannelAsync();
 
@@ -45,7 +45,9 @@ public class RabbitMQService
             arguments: null
         );
 
-        var body = Encoding.UTF8.GetBytes(message);
+        var messageSerilized = JsonSerializer.Serialize(message);
+
+        var body = Encoding.UTF8.GetBytes(messageSerilized);
 
         await _channel.BasicPublishAsync(
             exchange: string.Empty,

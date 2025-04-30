@@ -16,8 +16,19 @@ public class UserService : IUserServiceInterface
 
     public async Task<User>CreateUserAsync(User user)
     {
+        var userExist =  await _userRepository.FindByEmail(user.Email);
+
+        if (userExist != null)
+        {
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = "Exist User with this email",
+                    ErrorCode = ErrorsCodeConstants.USER_NOT_SAVE
+                }, HttpStatusCode.BadRequest
+            );
+        } 
         var hashedPassword = _passwordHasher.HashPassword(user, user.Password);
-        user.Password = hashedPassword; 
+        user.Password = hashedPassword;
         return await _userRepository.CreateUser(user);
     }
 

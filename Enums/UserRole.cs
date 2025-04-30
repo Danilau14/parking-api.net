@@ -1,4 +1,4 @@
-﻿namespace ParkingApi.Models.Enums;
+﻿namespace ParkingApi.Enums;
 
 public enum UserRole
 {

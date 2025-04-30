@@ -12,6 +12,7 @@ public class ErrorsCodeConstants
     public const string PARKINGLOT_INVALID = "PARKINGLOT_INVALID";
     public const string PARKINGLOT_NOT_FOUND = "PARKINGLOT_NOT_FOUND";
     public const string PARKING_NOT_SAVE = "PARKING_NOT_SAVE";
+    public const string USER_NOT_SAVE = "USER_NOT_SAVE";
     public const string VEHICLE_INVALID = "VEHICLE_INVALID";
     public const string VEHICLE_NOT_FOUND = "VEHICLE_NOT_FOUND";
 }
