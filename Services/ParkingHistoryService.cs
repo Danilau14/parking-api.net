@@ -1,4 +1,4 @@
-﻿namespace ParkingApi.Services.cs;
+﻿namespace ParkingApi.Services;
 
 public class ParkingHistoryService : IParkingHistoryService
 {
@@ -7,13 +7,15 @@ public class ParkingHistoryService : IParkingHistoryService
     private readonly IParkingHistoryRepository _parkingHistoryRepository;
     private readonly IEmailService _emailService;
     private readonly ILogger<ParkingHistoryService> _logger;
+    private readonly IRabbitMQSendMail _rabbitMQSendMail;
 
     public ParkingHistoryService(
         IParkingLotRepository parkingLotRepository,
         IVehicleRepository vehicleRepository,
         IParkingHistoryRepository parkingHistoryRepository,
         IEmailService emailService,
-        ILogger<ParkingHistoryService> logger
+        ILogger<ParkingHistoryService> logger,
+        IRabbitMQSendMail rabbitMQSendMail
         )
     {
         _parkingLotRepository = parkingLotRepository;
@@ -21,6 +23,7 @@ public class ParkingHistoryService : IParkingHistoryService
         _parkingHistoryRepository = parkingHistoryRepository;
         _emailService = emailService;
         _logger = logger;
+        _rabbitMQSendMail = rabbitMQSendMail;
     }
 
     public async Task<ParkingHistory> CreateParkingHistory(
@@ -73,7 +76,7 @@ public class ParkingHistoryService : IParkingHistoryService
         {
             try
             {
-                await _emailService.SendEmailAsync(
+                await _rabbitMQSendMail.PublishAuditMessageAsync(
                         parkingLot.User.Email,
                         "Vehicle in Parking lot",
                         $"Vehicle with LicensePlate {vehicle.LicensePlate} in ParkingLot {parkingLot.Id}"
@@ -124,7 +127,7 @@ public class ParkingHistoryService : IParkingHistoryService
         {
             try
             {
-                await _emailService.SendEmailAsync(
+                await _rabbitMQSendMail.PublishAuditMessageAsync(
                         parkingLot.User.Email,
                         "Vehicle in Parking lot",
                         $"Vehicle with LicensePlate {newVehicle.LicensePlate} in ParkingLot {parkingLot.Id}"

@@ -47,4 +47,5 @@ global using ParkingApi.Mappings.ParkingsLot;
 global using ParkingApi.Mappings.Users;
 global using ParkingApi.Models;
 global using ParkingApi.Repositories;
-global using ParkingApi.Services.cs;
+global using ParkingApi.Services;
+global using ParkingApi.Services.RabbitMQ;

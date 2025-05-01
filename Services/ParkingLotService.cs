@@ -1,4 +1,4 @@
-﻿namespace ParkingApi.Services.cs;
+﻿namespace ParkingApi.Services;
 
 public class ParkingLotService : IParkingLotService
 {

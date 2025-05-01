@@ -9,11 +9,18 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         return await _dbSet.SingleOrDefaultAsync(u => u.Email == email);
     }
 
-    public async Task<User> CreateUser(User user)
+    public async Task<(int, string)> CreateUser(User user)
     {
+        var error = string.Empty;
         await _dbSet.AddAsync(user);            
-        await _context.SaveChangesAsync();    
-        return user;
+        var isSaved =  await _context.SaveChangesAsync();
+
+        if(isSaved<1)
+        {
+            error = "User Not Save";
+        }
+
+        return(isSaved, error);
     }
 
 }

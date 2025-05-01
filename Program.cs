@@ -1,4 +1,5 @@
 using ParkingApi.Core.Global;
+using ParkingApi.Services.RabbitMQ.Publisher;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,11 +29,15 @@ builder.Services.AddScoped<IParkingLotService, ParkingLotService>();
 builder.Services.AddScoped<IParkingHistoryRepository, ParkingHistoryRepository>();
 builder.Services.AddScoped<IParkingHistoryService, ParkingHistoryService>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+builder.Services.AddScoped<IRabbitMQMessageBuilder, RabbitMQMessageBuilder>();
+builder.Services.AddScoped<IRabbitMQSendMail, RabbitMQSendMail>();
 
 
 builder.Services.AddAuthorizationPolicies();
 
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
 

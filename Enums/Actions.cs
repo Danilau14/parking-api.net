@@ -2,7 +2,7 @@
 
 public enum Actions
 {
-    CREATE,
-    UPDATE,
-    DELETE
+    CREATE = 0,
+    UPDATE = 1,
+    DELETE = 2
 }

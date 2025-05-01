@@ -1,17 +1,24 @@
-﻿namespace ParkingApi.Services.cs;
+﻿using Mono.TextTemplating;
+
+namespace ParkingApi.Services;
 
 public class UserService : IUserServiceInterface
 {
     private readonly PasswordHasher<User> _passwordHasher;
     private readonly IUserRepository _userRepository;
     private readonly IJwtTokenGenerator _tokenGenerator;
-
-
-    public UserService(IUserRepository userRepository, IJwtTokenGenerator tokenGenerator)
+    private readonly IRabbitMQMessageBuilder _rabbitMQMessageBuilder;
+    
+    public UserService(
+        IUserRepository userRepository, 
+        IJwtTokenGenerator tokenGenerator,
+        IRabbitMQMessageBuilder rabbitMQMessageBuilder
+    )
     {
         _passwordHasher = new PasswordHasher<User>();
         _userRepository = userRepository;
         _tokenGenerator = tokenGenerator;
+        _rabbitMQMessageBuilder = rabbitMQMessageBuilder;
     }
 
     public async Task<User>CreateUserAsync(User user)
@@ -29,7 +36,20 @@ public class UserService : IUserServiceInterface
         } 
         var hashedPassword = _passwordHasher.HashPassword(user, user.Password);
         user.Password = hashedPassword;
-        return await _userRepository.CreateUser(user);
+
+        var (isSaved, response) = await _userRepository.CreateUser(user);
+
+         if(isSaved<1)
+         {
+            throw new EipexException(new ErrorResponse
+                {
+                    Message = response,
+                    ErrorCode = ErrorsCodeConstants.USER_NOT_SAVE
+                }, HttpStatusCode.BadRequest
+            );
+         }
+
+         return user;
     }
 
     public async Task<string?> LoginAsync(string email, string password)

@@ -1,9 +1,6 @@
-﻿
-using System.Threading.Channels;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
+﻿using RabbitMQ.Client.Events;
 
-namespace ParkingApi.Services.cs;
+namespace ParkingApi.Services.RabbitMQ;
 
 public class RabbitMQService : IRabbitMQService
 {
@@ -33,7 +30,7 @@ public class RabbitMQService : IRabbitMQService
         }
     }
 
-    public async Task PublishMessage(MessageDto message, string? queueName = null)
+    public async Task PublishMessage<T>(T message, string? queueName = null)
     {
         await EnsureConnectionAndChannelAsync();
 
