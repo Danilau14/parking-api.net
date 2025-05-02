@@ -1,4 +1,6 @@
-﻿namespace ParkingApi.Mappings.ParkingsLot;
+﻿using ParkingApi.Application.Features.ParkingLots.Dtos;
+
+namespace ParkingApi.Mappings.ParkingsLot;
 
 public class CreateParkingLotMapping : Profile
 {

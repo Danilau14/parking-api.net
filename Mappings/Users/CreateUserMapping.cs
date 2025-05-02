@@ -1,4 +1,6 @@
-﻿namespace ParkingApi.Mappings.Users;
+﻿using ParkingApi.Application.Features.Users.Dtos;
+
+namespace ParkingApi.Mappings.Users;
 
 public class CreateUserMapping : Profile
 {

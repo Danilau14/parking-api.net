@@ -21,6 +21,7 @@ global using Microsoft.Extensions.Options;
 global using Microsoft.IdentityModel.Tokens;
 global using Microsoft.OpenApi.Models;
 
+global using MediatR;
 
 // AutoMapper
 global using AutoMapper;
@@ -37,8 +38,10 @@ global using ParkingApi.Dto.Pagination;
 global using ParkingApi.Dto.ParkingHistory;
 global using ParkingApi.Dto.ParkingsLot;
 global using ParkingApi.Dto.QueueMessage;
-global using ParkingApi.Dto.Users;
 global using ParkingApi.Enums;
+global using ParkingApi.Events;
+global using ParkingApi.Events.DomainEvents;
+global using ParkingApi.Events.DomainEvents.Handlers;
 global using ParkingApi.Exceptions;
 global using ParkingApi.Extensions;
 global using ParkingApi.Interfaces;
@@ -49,3 +52,15 @@ global using ParkingApi.Models;
 global using ParkingApi.Repositories;
 global using ParkingApi.Services;
 global using ParkingApi.Services.RabbitMQ;
+
+global using ParkingApi.Application.Features.Auth.Commands;
+global using ParkingApi.Application.Features.Auth.Handlers;
+global using ParkingApi.Application.Features.Auth.Dtos;
+global using ParkingApi.Application.Features.ParkingLots.Commands;
+global using ParkingApi.Application.Features.ParkingLots.Handlers;
+global using ParkingApi.Application.Features.ParkingLots.Dtos;
+global using ParkingApi.Application.Features.Users.Commands;
+global using ParkingApi.Application.Features.Users.Handlers;
+global using ParkingApi.Application.Features.Users.Dtos;
+
+global using ParkingApi.Infrastructure;

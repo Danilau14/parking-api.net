@@ -1,4 +1,7 @@
-﻿namespace ParkingApi.Controllers;
+﻿using ParkingApi.Application.Features.ParkingLots.Dtos;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+
+namespace ParkingApi.Controllers;
 
 /// <summary>
 /// Controlador que gestiona los parqueaderos.
@@ -18,18 +21,22 @@ public class ParkingsLotsController : ControllerBase
     private readonly IParkingLotService _parkingLotService;
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
+    private readonly IMediator _mediator;
 
     public ParkingsLotsController(
         IParkingLotRepository parkingLotRepository, 
         IMapper mapper,
         IParkingLotService parkingLotService,   
-        IUserRepository userRepository
+        IUserRepository userRepository,
+        IMediator mediator  
+
     )
     {
         _parkingLotRepository = parkingLotRepository;
         _mapper = mapper;
         _parkingLotService = parkingLotService;
         _userRepository = userRepository;
+        _mediator = mediator;
     }
 
     /// <summary>
@@ -52,34 +59,15 @@ public class ParkingsLotsController : ControllerBase
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> CrearteParkingLot([FromBody] CreateParkingLotDto createParkingLotDto)
     {
-        var parkingLot = _mapper.Map<ParkingLot>(createParkingLotDto);
-
-        try
-        {
-            var parkingLotSaved = await _parkingLotService.CreateParkigLotAsync(parkingLot);
-
-            var dto = _mapper.Map<ParkingLotDto>(parkingLotSaved);
-
-            return Ok(dto);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            throw new EipexException(new ErrorResponse
-                {
-                    Message = ex.Message,
-                    ErrorCode = ErrorsCodeConstants.PARKING_NOT_SAVE
-            }, HttpStatusCode.NotFound
+        var command = new CreateParkingLotsCommand(
+                createParkingLotDto.Size,
+                createParkingLotDto.CostPerHour,
+                createParkingLotDto.PartnerId
             );
-        }
-        catch (Exception ex)
-        {
-            throw new EipexException(new ErrorResponse
-                {
-                    Message = ex.Message,
-                    ErrorCode = ErrorsCodeConstants.PARKING_NOT_SAVE
-            }, HttpStatusCode.BadRequest
-            );
-        }
+
+        var parkingLotSaved = await _mediator.Send(command);
+        var dto = _mapper.Map<ParkingLotDto>(parkingLotSaved);
+        return Ok(dto);
     }
 
     /// <summary>
@@ -102,20 +90,9 @@ public class ParkingsLotsController : ControllerBase
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> FindOneParkingLot(int id)
     {
-        var parkingLot = await _parkingLotRepository.GetByIdAsync(id);
-
-        if (parkingLot == null)
-        {
-            throw new EipexException(new ErrorResponse
-                {
-                    Message = "Parking dont found",
-                    ErrorCode = ErrorsCodeConstants.PARKINGLOT_NOT_FOUND
-                }, HttpStatusCode.NotFound
-            );
-        }
-
-        var dto = _mapper.Map<ParkingLotDto>(parkingLot);
-
+        var command = new FindOneByIdParkingLotCommand(id);
+        var parkingLotSaved = await _mediator.Send(command);
+        var dto = _mapper.Map<ParkingLotDto>(parkingLotSaved);
         return Ok(dto);
     }
 

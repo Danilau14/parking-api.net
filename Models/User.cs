@@ -4,11 +4,10 @@ namespace ParkingApi.Models;
 
 public class User
 {
-    public required string _email;
-    public required List<ParkingLot> _parkingLots;
+    private string _email;
+    private List<ParkingLot> _parkingLots;
 
-    [Key]
-    public required int Id { get; set; }
+    public int Id { get; set; }
 
     public bool RecycleBin { get; set; } = false;
 
@@ -17,6 +16,7 @@ public class User
     [Column(TypeName = "text")]
     public required string Password { get; set; }
 
+    [Required]
     [EmailAddress]
     public required string Email
     {

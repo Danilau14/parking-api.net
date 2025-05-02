@@ -5,19 +5,16 @@
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    private readonly IUserServiceInterface _userService;
     private readonly IEmailService _emailService;   
-    private readonly IMapper _mapper;
+    private readonly IMediator _mediator;
 
     public UsersController(
-        IUserServiceInterface userService, 
-        IMapper mapper,
-        IEmailService emailService       
+        IEmailService emailService,
+        IMediator mediator
     )
     {
-        _userService = userService;
-        _mapper = mapper;
         _emailService = emailService;
+        _mediator = mediator;
     }
 
     /// <summary>
@@ -40,9 +37,8 @@ public class UsersController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] CreateUserDto data)
     {
-        var user = _mapper.Map<User>(data);
-
-        await _userService.CreateUserAsync(user);
+        var command = new RegisterUserCommand(data.Email, data.Password, data.Role);
+        await _mediator.Send(command);
         return Created();
     }
 

@@ -1,4 +1,6 @@
-﻿namespace ParkingApi.Services;
+﻿using ParkingApi.Models;
+
+namespace ParkingApi.Services;
 
 public class ParkingHistoryService : IParkingHistoryService
 {
@@ -7,7 +9,7 @@ public class ParkingHistoryService : IParkingHistoryService
     private readonly IParkingHistoryRepository _parkingHistoryRepository;
     private readonly IEmailService _emailService;
     private readonly ILogger<ParkingHistoryService> _logger;
-    private readonly IRabbitMQSendMail _rabbitMQSendMail;
+    private readonly IDomainEventPublisher _domainEventPublisher;
 
     public ParkingHistoryService(
         IParkingLotRepository parkingLotRepository,
@@ -15,15 +17,15 @@ public class ParkingHistoryService : IParkingHistoryService
         IParkingHistoryRepository parkingHistoryRepository,
         IEmailService emailService,
         ILogger<ParkingHistoryService> logger,
-        IRabbitMQSendMail rabbitMQSendMail
-        )
+        IDomainEventPublisher domainEventPublisher
+    )
     {
         _parkingLotRepository = parkingLotRepository;
         _vehicleRepository = vehicleRepository;
         _parkingHistoryRepository = parkingHistoryRepository;
         _emailService = emailService;
         _logger = logger;
-        _rabbitMQSendMail = rabbitMQSendMail;
+        _domainEventPublisher = domainEventPublisher;
     }
 
     public async Task<ParkingHistory> CreateParkingHistory(
@@ -70,17 +72,17 @@ public class ParkingHistoryService : IParkingHistoryService
                     parkingLot
                 );
 
-
-
         if (parkingLot.User?.Email != null)
         {
             try
             {
-                await _rabbitMQSendMail.PublishAuditMessageAsync(
-                        parkingLot.User.Email,
-                        "Vehicle in Parking lot",
-                        $"Vehicle with LicensePlate {vehicle.LicensePlate} in ParkingLot {parkingLot.Id}"
-                    );
+                var domainEvent = new VehicleRegisteredEvent(
+                   parkingLot.User.Email,
+                   vehicle.LicensePlate,
+                   parkingLot.Id
+                );
+
+                await _domainEventPublisher.PublishAsync(domainEvent);
             }
             catch (Exception ex)
             {
@@ -127,11 +129,13 @@ public class ParkingHistoryService : IParkingHistoryService
         {
             try
             {
-                await _rabbitMQSendMail.PublishAuditMessageAsync(
-                        parkingLot.User.Email,
-                        "Vehicle in Parking lot",
-                        $"Vehicle with LicensePlate {newVehicle.LicensePlate} in ParkingLot {parkingLot.Id}"
-                    );
+                var domainEvent = new VehicleRegisteredEvent(
+                     parkingLot.User.Email,
+                     newVehicle.LicensePlate,
+                     parkingLot.Id
+                );
+
+                await _domainEventPublisher.PublishAsync(domainEvent);
             }
             catch (Exception ex)
             {

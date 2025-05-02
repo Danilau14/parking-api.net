@@ -1,4 +1,4 @@
-﻿namespace ParkingApi.Dto.ParkingsLot;
+﻿namespace ParkingApi.Application.Features.ParkingLots.Dtos;
 
 public class CreateParkingLotDto
 {

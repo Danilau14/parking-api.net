@@ -22,11 +22,11 @@ public class ParkingLotService : IParkingLotService
             if (null == partnerExist)
             {
                 throw new EipexException(new ErrorResponse
-                {
-                    Message = "Partner not found",
-                    ErrorCode = ErrorsCodeConstants.PARTNER_INVALID
-                }, HttpStatusCode.NotFound
-);
+                    {
+                        Message = "Partner not found",
+                        ErrorCode = ErrorsCodeConstants.PARTNER_INVALID
+                    }, HttpStatusCode.NotFound
+                );
             }
         }
 

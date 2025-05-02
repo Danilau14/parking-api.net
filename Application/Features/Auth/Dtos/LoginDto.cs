@@ -1,4 +1,4 @@
-﻿namespace ParkingApi.Dto.Users;
+﻿namespace ParkingApi.Application.Features.Auth.Dtos;
 
 public class LoginDto
 {

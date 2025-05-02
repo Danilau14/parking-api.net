@@ -1,4 +1,6 @@
+using System.Reflection;
 using ParkingApi.Core.Global;
+using ParkingApi.Infrastructure;
 using ParkingApi.Services.RabbitMQ.Publisher;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers( options =>
 {
-    options.Filters.Add<GlobalExceptionFilter>();
+   options.Filters.Add<GlobalExceptionFilter>();
 }
 );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -15,6 +17,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.SwaggerWithBearerToken();
 
 builder.Services.ConfigureDbContext(builder.Configuration);
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
 builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
@@ -29,8 +33,14 @@ builder.Services.AddScoped<IParkingLotService, ParkingLotService>();
 builder.Services.AddScoped<IParkingHistoryRepository, ParkingHistoryRepository>();
 builder.Services.AddScoped<IParkingHistoryService, ParkingHistoryService>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+
+
 builder.Services.AddScoped<IRabbitMQMessageBuilder, RabbitMQMessageBuilder>();
 builder.Services.AddScoped<IRabbitMQSendMail, RabbitMQSendMail>();
+
+
+builder.Services.AddScoped<IDomainEventPublisher, DomainEventPublisher>();
+builder.Services.AddScoped<IDomainEventHandler<VehicleRegisteredEvent>, VehicleRegisteredEventHandler>();
 
 
 builder.Services.AddAuthorizationPolicies();
