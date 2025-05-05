@@ -1,4 +1,6 @@
-﻿namespace ParkingApi.Application.Features.Users.Dtos;
+﻿using ParkingApi.Core.Enums;
+
+namespace ParkingApi.Application.Features.Users.Dtos;
 
 public class CreateUserDto
 {

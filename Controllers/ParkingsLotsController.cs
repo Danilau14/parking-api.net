@@ -1,7 +1,4 @@
-﻿using ParkingApi.Application.Features.ParkingLots.Dtos;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-
-namespace ParkingApi.Controllers;
+﻿namespace ParkingApi.Controllers;
 
 /// <summary>
 /// Controlador que gestiona los parqueaderos.
@@ -17,25 +14,10 @@ namespace ParkingApi.Controllers;
 [ApiController]
 public class ParkingsLotsController : ControllerBase
 {
-    private readonly IParkingLotRepository _parkingLotRepository;
-    private readonly IParkingLotService _parkingLotService;
-    private readonly IUserRepository _userRepository;
-    private readonly IMapper _mapper;
     private readonly IMediator _mediator;
 
-    public ParkingsLotsController(
-        IParkingLotRepository parkingLotRepository, 
-        IMapper mapper,
-        IParkingLotService parkingLotService,   
-        IUserRepository userRepository,
-        IMediator mediator  
-
-    )
+    public ParkingsLotsController(IMediator mediator)
     {
-        _parkingLotRepository = parkingLotRepository;
-        _mapper = mapper;
-        _parkingLotService = parkingLotService;
-        _userRepository = userRepository;
         _mediator = mediator;
     }
 
@@ -66,8 +48,7 @@ public class ParkingsLotsController : ControllerBase
             );
 
         var parkingLotSaved = await _mediator.Send(command);
-        var dto = _mapper.Map<ParkingLotDto>(parkingLotSaved);
-        return Ok(dto);
+        return Ok(parkingLotSaved);
     }
 
     /// <summary>
@@ -90,10 +71,9 @@ public class ParkingsLotsController : ControllerBase
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> FindOneParkingLot(int id)
     {
-        var command = new FindOneByIdParkingLotCommand(id);
-        var parkingLotSaved = await _mediator.Send(command);
-        var dto = _mapper.Map<ParkingLotDto>(parkingLotSaved);
-        return Ok(dto);
+        var command = new FindOneByIdParkingLotQuery(id);
+        var parkingLotFound = await _mediator.Send(command);
+        return Ok(parkingLotFound);
     }
 
     /// <summary>
@@ -121,71 +101,9 @@ public class ParkingsLotsController : ControllerBase
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> UpdatedParkingLot( int id, [FromBody] UpdatedParkingLotDto updatedParkingLotDto)
     {
-        var parkingLot = await _parkingLotRepository.GetByIdAsync(id);
-
-        if (parkingLot == null)
-        {
-            throw new EipexException(new ErrorResponse
-                {
-                    Message = "Parking dont found",
-                    ErrorCode = ErrorsCodeConstants.PARKINGLOT_NOT_FOUND
-                }, HttpStatusCode.NotFound
-            );
-        }
-
-        if (updatedParkingLotDto.PartnerId.HasValue)
-        {
-            var partner = await _userRepository.GetByIdAsync(updatedParkingLotDto.PartnerId.Value);
-
-            if (partner == null)
-            {
-                throw new EipexException(new ErrorResponse
-                    {
-                        Message = "Invalid PartnerId",
-                        ErrorCode = ErrorsCodeConstants.PARKINGLOT_INVALID
-                    }, HttpStatusCode.NotFound
-                );
-            }
-
-            parkingLot.User = partner;
-            parkingLot.UserId = partner.Id;
-        }
-
-        if (updatedParkingLotDto.Size.HasValue)
-        {
-            if (updatedParkingLotDto.Size.Value > parkingLot.Size)
-            {
-                parkingLot.FreeSpaces = parkingLot.FreeSpaces + (updatedParkingLotDto.Size.Value - parkingLot.Size);
-                parkingLot.Size = updatedParkingLotDto.Size.Value;
-            }
-
-            if (updatedParkingLotDto.Size.Value < parkingLot.Size)
-            {
-                if (parkingLot.FreeSpaces == 0 || parkingLot.Size - parkingLot.FreeSpaces > updatedParkingLotDto.Size.Value)
-                {
-                    throw new EipexException(new ErrorResponse
-                        {
-                            Message = "The size of the parking lot cannot be less than the number of current vehicles.",
-                            ErrorCode = ErrorsCodeConstants.PARKINGLOT_CONFLICT
-                        }, HttpStatusCode.Conflict
-                    );
-                }
-
-                parkingLot.FreeSpaces = parkingLot.FreeSpaces - (parkingLot.Size - updatedParkingLotDto.Size.Value);
-                parkingLot.Size = updatedParkingLotDto.Size.Value;
-            }
-        }
-
-        if (updatedParkingLotDto.CostPerHour.HasValue)
-        {
-            parkingLot.CostPerHour = updatedParkingLotDto.CostPerHour.Value;
-        }
-
-        var parkingLotUpdate = await _parkingLotRepository.UpdatedParkingLot(parkingLot);
-
-        var dto = _mapper.Map<ParkingLotDto>(parkingLotUpdate);
-
-        return Ok(dto);
+        var command = new UpdateParkingLotCommand(id, updatedParkingLotDto);    
+        var parkingLotUpdated = await _mediator.Send(command);
+        return Ok(parkingLotUpdated);
     }
 
     /// <summary>
@@ -209,25 +127,11 @@ public class ParkingsLotsController : ControllerBase
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> RemoveParkingLot(int id)
     {
-        var parkingLot = await _parkingLotRepository.GetByIdAsync(id);
+        var command = new RemoveParkingLotCommand(id);
 
-        if (parkingLot == null)
-        {
-            throw new EipexException(new ErrorResponse
-                {
-                    Message = "Parking dont found",
-                    ErrorCode = ErrorsCodeConstants.PARKINGLOT_NOT_FOUND
-                }, HttpStatusCode.NotFound
-            );        
-        }
+        var parkingLot = await _mediator.Send(command);
 
-        parkingLot.RecycleBin = true;
-
-        var parkingLotUpdate = await _parkingLotRepository.UpdatedParkingLot(parkingLot);
-
-        var dto = _mapper.Map<ParkingLotDto>(parkingLotUpdate);
-
-        return Ok(dto);
+        return Ok(parkingLot);
     }
 
     /// <summary>
@@ -247,21 +151,10 @@ public class ParkingsLotsController : ControllerBase
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> FindParkingsLot([FromQuery] PaginationDto paginationDto)
     {
-        var (parkingsLot, totalCount) = await _parkingLotRepository.FindAndCountAsync(
-                paginationDto.Page,
-                paginationDto.Limit
-            );
+        var command = new FindParkingsLotQuery(paginationDto.Page, paginationDto.Limit);
 
-        var parkingsLotDto = _mapper.Map<List<ParkingLotDto>>(parkingsLot);
+        var listParkingDto = await _mediator.Send(command);
 
-        var result = new
-        {
-            Total = totalCount,
-            paginationDto.Page,
-            TotalPage = (int)Math.Ceiling((double)totalCount / paginationDto.Limit),
-            Data = parkingsLotDto
-        };
-
-        return Ok(result);
+        return Ok(listParkingDto);
     }
 }

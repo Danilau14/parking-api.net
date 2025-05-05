@@ -1,4 +1,5 @@
 ﻿using ParkingApi.Application.Features.ParkingLots.Dtos;
+using ParkingApi.Core.Models;
 
 namespace ParkingApi.Mappings.ParkingsLot;
 

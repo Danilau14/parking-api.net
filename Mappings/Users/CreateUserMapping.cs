@@ -1,4 +1,5 @@
 ﻿using ParkingApi.Application.Features.Users.Dtos;
+using ParkingApi.Core.Models;
 
 namespace ParkingApi.Mappings.Users;
 

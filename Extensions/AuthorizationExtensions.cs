@@ -1,4 +1,4 @@
-﻿using ParkingApi.Enums;
+﻿using ParkingApi.Core.Enums;
 
 namespace ParkingApi.Extensions;
 

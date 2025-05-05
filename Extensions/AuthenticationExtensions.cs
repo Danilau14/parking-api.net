@@ -1,4 +1,6 @@
-﻿namespace ParkingApi.Extensions;
+﻿using ParkingApi.Core.Interfaces;
+
+namespace ParkingApi.Extensions;
 
 public static class AuthenticationExtensions
 {

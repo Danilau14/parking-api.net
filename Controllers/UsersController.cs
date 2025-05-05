@@ -5,15 +5,10 @@
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    private readonly IEmailService _emailService;   
     private readonly IMediator _mediator;
 
-    public UsersController(
-        IEmailService emailService,
-        IMediator mediator
-    )
+    public UsersController(IMediator mediator)
     {
-        _emailService = emailService;
         _mediator = mediator;
     }
 
@@ -45,24 +40,8 @@ public class UsersController : ControllerBase
     [HttpPost("send-email-partner")]
     public async Task<IActionResult> SendEmail([FromBody] EmailForUserDto emailForUser)
     {
-        try
-        {
-            await _emailService.SendEmailAsync(
-                    emailForUser.Email,
-                    emailForUser.Subject,
-                    emailForUser.Message
-                );
-
-            return Ok( new { Message = "Send email" });
-        }
-        catch (Exception ex)
-        {
-            throw new EipexException(new ErrorResponse
-                {
-                    Message = ex.Message,
-                    ErrorCode = ErrorsCodeConstants.EMAIL_FAILED
-                }, HttpStatusCode.BadRequest
-            );
-        } 
+        var notification = new SendEmailEvent(emailForUser.Email, emailForUser.Subject, emailForUser.Message);
+        await _mediator.Publish(notification);
+        return Ok( new { Message = "Send email" });
     }
 }

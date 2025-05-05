@@ -1,0 +1,10 @@
+﻿using ParkingApi.Core.Models;
+
+namespace ParkingApi.Core.Interfaces;
+
+public interface IUserServiceInterface
+{
+    Task<User> CreateUserAsync(User user);
+    Task<string?> LoginAsync(string email, string password);
+
+}

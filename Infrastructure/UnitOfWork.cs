@@ -1,4 +1,7 @@
-﻿namespace ParkingApi.Infrastructure;
+﻿using ParkingApi.Core.Interfaces;
+using ParkingApi.Infrastructure.Data;
+
+namespace ParkingApi.Infrastructure;
 
 public class UnitOfWork : IUnitOfWork
 {
@@ -7,6 +10,7 @@ public class UnitOfWork : IUnitOfWork
     private IRevokedTokenRepository? _revokedTokenRepository;
     private IParkingLotRepository? _parkingLotRepository;
     private IParkingHistoryRepository? _parkingHistoryRepository;   
+    private IVehicleRepository? _vehicleRepository;
 
     public UnitOfWork(ApplicationDbContext context)
     {
@@ -18,4 +22,5 @@ public class UnitOfWork : IUnitOfWork
     public IRevokedTokenRepository RevokedTokenRepository => _revokedTokenRepository ??= new RevokedTokenRepository(_context);
     public IParkingLotRepository ParkingLotRepository => _parkingLotRepository ??= new ParkingLotRepository(_context);
     public IParkingHistoryRepository ParkingHistoryRepository => _parkingHistoryRepository ??= new ParkingHistoryRepository(_context);
+    public IVehicleRepository VehicleRepository => _vehicleRepository ??= new VehicleRepository(_context);
 }

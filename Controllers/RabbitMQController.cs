@@ -1,4 +1,6 @@
-﻿namespace ParkingApi.Controllers;
+﻿using ParkingApi.Application.Services.RabbitMQ;
+
+namespace ParkingApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

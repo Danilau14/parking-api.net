@@ -1,7 +1,4 @@
 using System.Reflection;
-using ParkingApi.Core.Global;
-using ParkingApi.Infrastructure;
-using ParkingApi.Services.RabbitMQ.Publisher;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,12 +23,9 @@ builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserServiceInterface, UserService>();
 builder.Services.AddScoped<IRevokedTokenRepository, RevokedTokenRepository>();
 builder.Services.AddScoped<IParkingLotRepository, ParkingLotRepository>();
-builder.Services.AddScoped<IParkingLotService, ParkingLotService>();
 builder.Services.AddScoped<IParkingHistoryRepository, ParkingHistoryRepository>();
-builder.Services.AddScoped<IParkingHistoryService, ParkingHistoryService>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 
 
@@ -39,8 +33,8 @@ builder.Services.AddScoped<IRabbitMQMessageBuilder, RabbitMQMessageBuilder>();
 builder.Services.AddScoped<IRabbitMQSendMail, RabbitMQSendMail>();
 
 
-builder.Services.AddScoped<IDomainEventPublisher, DomainEventPublisher>();
-builder.Services.AddScoped<IDomainEventHandler<VehicleRegisteredEvent>, VehicleRegisteredEventHandler>();
+//builder.Services.AddScoped<IDomainEventPublisher, DomainEventPublisher>();
+//builder.Services.AddScoped<IDomainEventHandler<VehicleRegisteredEvent>, VehicleRegisteredEventHandler>();
 
 
 builder.Services.AddAuthorizationPolicies();

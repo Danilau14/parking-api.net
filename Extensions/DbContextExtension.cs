@@ -1,4 +1,6 @@
-﻿namespace ParkingApi.Extensions;
+﻿using ParkingApi.Infrastructure.Data;
+
+namespace ParkingApi.Extensions;
 
 public static class DbContextExtension
 {
