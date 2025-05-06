@@ -1,3 +1,4 @@
+using System.Configuration;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers( options =>
 {
-   options.Filters.Add<GlobalExceptionFilter>();
+   //options.Filters.Add<GlobalExceptionFilter>();
 }
 );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -14,6 +15,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.SwaggerWithBearerToken();
 
 builder.Services.ConfigureDbContext(builder.Configuration);
+
+builder.Services.Configure<DynamoDbSettings>(builder.Configuration.GetSection("DynamoDbSettings"));
+builder.Services.AddDynamoDb(builder.Configuration);
+
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
@@ -23,6 +28,7 @@ builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserRepositoryDynamo, UserRepositoryDynamo>();
 builder.Services.AddScoped<IRevokedTokenRepository, RevokedTokenRepository>();
 builder.Services.AddScoped<IParkingLotRepository, ParkingLotRepository>();
 builder.Services.AddScoped<IParkingHistoryRepository, ParkingHistoryRepository>();
@@ -45,7 +51,7 @@ builder.Services.AddScoped<IUserContextService, UserContextService>();
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
-builder.Services.AddAutoMapper(cfg => {
+builder.Services.AddAutoMapper(static cfg => {
     cfg.AddProfile<CreateUserMapping>();
     cfg.AddProfile<CreateParkingLotMapping>();
     cfg.AddProfile<ParkingLotMapping>();

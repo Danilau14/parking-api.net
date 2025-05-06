@@ -1,8 +1,4 @@
-﻿using ParkingApi.Core.Interfaces;
-using ParkingApi.Core.Models;
-using ParkingApi.Infrastructure.Data;
-
-namespace ParkingApi.Infrastructure.Repositories;
+﻿namespace ParkingApi.Infrastructure.Repositories;
 
 public class UserRepository : BaseRepository<User>, IUserRepository
 {

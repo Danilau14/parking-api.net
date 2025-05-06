@@ -4,6 +4,8 @@ public interface IUnitOfWork
 {
     ApplicationDbContext Context { get; }
     IUserRepository UserRepository { get; }
+    IUserRepositoryDynamo UserRepositoryDynamo { get; }
+
     IRevokedTokenRepository RevokedTokenRepository { get; }
     IParkingLotRepository ParkingLotRepository { get; }
     IParkingHistoryRepository ParkingHistoryRepository { get; }

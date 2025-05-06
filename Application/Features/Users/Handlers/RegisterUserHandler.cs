@@ -1,18 +1,18 @@
 ﻿namespace ParkingApi.Application.Features.Users.Handlers;
-public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, User>
+public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, UserDynamo>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly PasswordHasher<User> _passwordHasher;
+    private readonly PasswordHasher<UserDynamo> _passwordHasher;
 
     public RegisterUserHandler(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        _passwordHasher = new PasswordHasher<User>();
+        _passwordHasher = new PasswordHasher<UserDynamo>();
     }
 
-    public async Task<User> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task<UserDynamo> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var userExist = await _unitOfWork.UserRepository.FindByEmail(request.Email);
+        var userExist = await _unitOfWork.UserRepositoryDynamo.FindByEmail(request.Email);
 
         if (userExist != null)
         {
@@ -24,18 +24,17 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, User>
             );
         }
 
-        var newUser = new User()
+        var newUser = new UserDynamo()
         {
             Email = request.Email,
             Password = request.Password,
             Role = request.Role,
-            ParkingLots = new List<ParkingLot>()
         };
 
         var hashedPassword = _passwordHasher.HashPassword(newUser, newUser.Password);
         newUser.Password = hashedPassword;
 
-        var (isSaved, response) = await _unitOfWork.UserRepository.CreateUser(newUser);
+        var (isSaved, response) = await _unitOfWork.UserRepositoryDynamo.CreateUser(newUser);
 
         if (isSaved < 1)
         {

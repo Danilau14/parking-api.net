@@ -9,8 +9,6 @@ global using System.Security.Claims;
 global using System.Text;
 global using System.Text.Json;
 
-
-
 // Microsoft
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Authorization;
@@ -24,8 +22,17 @@ global using Microsoft.OpenApi.Models;
 
 global using MediatR;
 
+//AWS
+global using Amazon;
+global using Amazon.DynamoDBv2;
+global using Amazon.DynamoDBv2.DataModel;
+global using Amazon.DynamoDBv2.DocumentModel;
+
+
+
 // AutoMapper
 global using AutoMapper;
+global using Profile = AutoMapper.Profile;
 
 // RabbitMQ
 global using RabbitMQ.Client;
@@ -36,6 +43,7 @@ global using ParkingApi.Core;
 
 global using ParkingApi.Application.Common.Dtos;
 global using ParkingApi.Application.Common.Exceptions;
+global using ParkingApi.Application.Common.Converters;
 global using ParkingApi.Application.Features.Auth.Commands;
 global using ParkingApi.Application.Features.Auth.Dtos;
 global using ParkingApi.Application.Features.Emails.Events;
@@ -51,6 +59,7 @@ global using ParkingApi.Application.Features.ParkingHistories.Queries;
 global using ParkingApi.Application.Mappings.ParkingHistories;
 global using ParkingApi.Application.Mappings.ParkingsLot;
 global using ParkingApi.Application.Mappings.Users;
+global using ParkingApi.Application.Messaging;
 
 global using ParkingApi.Application.Services;
 global using ParkingApi.Application.Services.RabbitMQ;
@@ -66,3 +75,6 @@ global using ParkingApi.Infrastructure;
 global using ParkingApi.Infrastructure.Data;
 global using ParkingApi.Infrastructure.Extensions;
 global using ParkingApi.Infrastructure.Repositories;
+global using ParkingApi.Infrastructure.RepositoriesDynamo;
+
+global using AmazonProfile = Amazon.Profile;
