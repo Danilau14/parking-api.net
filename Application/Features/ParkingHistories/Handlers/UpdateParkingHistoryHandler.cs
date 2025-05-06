@@ -1,7 +1,4 @@
-﻿using ParkingApi.Core.Interfaces;
-using ParkingApi.Core.Models;
-
-namespace ParkingApi.Application.Features.ParkingHistories.Handlers;
+﻿namespace ParkingApi.Application.Features.ParkingHistories.Handlers;
 
 public class UpdateParkingHistoryHandler : IRequestHandler<UpdateParkingHistoryCommand, ParkingHistoryDto>
 {

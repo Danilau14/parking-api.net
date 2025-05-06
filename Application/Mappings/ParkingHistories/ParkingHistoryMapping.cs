@@ -1,6 +1,4 @@
-﻿using ParkingApi.Core.Models;
-
-namespace ParkingApi.Mappings.ParkingHistories;
+﻿namespace ParkingApi.Application.Mappings.ParkingHistories;
 
 public class ParkingHistoryMapping : Profile
 {

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace ParkingApi.Extensions;
+namespace ParkingApi.Infrastructure.Extensions;
 
 public static class SwaggerGenWithBearer
 {

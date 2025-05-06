@@ -1,4 +1,5 @@
-﻿using ParkingApi.Application.Services.RabbitMQ;
+﻿using ParkingApi.Application.Messaging;
+using ParkingApi.Application.Services.RabbitMQ;
 
 namespace ParkingApi.Controllers;
 

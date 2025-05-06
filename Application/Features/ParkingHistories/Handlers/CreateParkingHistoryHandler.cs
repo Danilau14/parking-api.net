@@ -1,6 +1,4 @@
-﻿using ParkingApi.Core.Interfaces;
-
-namespace ParkingApi.Application.Features.ParkingHistories.Handlers;
+﻿namespace ParkingApi.Application.Features.ParkingHistories.Handlers;
 
 public class CreateParkingHistoryHandler : IRequestHandler<CreateParkingHistoryCommand, ParkingHistory>
 {

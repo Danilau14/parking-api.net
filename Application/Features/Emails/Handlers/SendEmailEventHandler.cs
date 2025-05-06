@@ -1,7 +1,4 @@
-﻿using ParkingApi.Application.Features.Emails.Events;
-using ParkingApi.Core.Interfaces;
-
-namespace ParkingApi.Application.Features.Emails.Handlers;
+﻿namespace ParkingApi.Application.Features.Emails.Handlers;
 
 public class SendEmailEventHandler : INotificationHandler<SendEmailEvent>
 {

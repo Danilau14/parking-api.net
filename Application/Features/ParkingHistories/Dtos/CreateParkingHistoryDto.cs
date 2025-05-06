@@ -1,4 +1,4 @@
-﻿namespace ParkingApi.Dto.ParkingHistory;
+﻿namespace ParkingApi.Application.Features.ParkingHistories.Dtos;
 
 public class CreateParkingHistoryDto
 {

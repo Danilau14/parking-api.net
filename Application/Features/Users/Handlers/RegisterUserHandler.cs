@@ -1,8 +1,4 @@
-﻿using ParkingApi.Core.Interfaces;
-using ParkingApi.Core.Models;
-
-namespace ParkingApi.Application.Features.Users.Handlers;
-
+﻿namespace ParkingApi.Application.Features.Users.Handlers;
 public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, User>
 {
     private readonly IUnitOfWork _unitOfWork;

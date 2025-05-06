@@ -1,4 +1,4 @@
-﻿namespace ParkingApi.Exceptions;
+﻿namespace ParkingApi.Application.Common.Exceptions;
 
 public class EipexException : Exception
 {

@@ -1,8 +1,4 @@
-﻿using ParkingApi.Core.Interfaces;
-using ParkingApi.Core.Models;
-using RabbitMQ.Client.Events;
-
-namespace ParkingApi.Application.Services.RabbitMQ;
+﻿namespace ParkingApi.Application.Services.RabbitMQ;
 
 public class RabbitMQService : IRabbitMQService
 {

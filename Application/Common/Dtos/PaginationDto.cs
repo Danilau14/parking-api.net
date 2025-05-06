@@ -1,4 +1,4 @@
-﻿namespace ParkingApi.Dto.Pagination;
+﻿namespace ParkingApi.Application.Common.Dtos;
 
 public class PaginationDto
 {

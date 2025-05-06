@@ -1,6 +1,6 @@
 ﻿using ParkingApi.Infrastructure.Data;
 
-namespace ParkingApi.Extensions;
+namespace ParkingApi.Infrastructure.Extensions;
 
 public static class DbContextExtension
 {

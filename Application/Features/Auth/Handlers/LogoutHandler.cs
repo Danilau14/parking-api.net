@@ -1,6 +1,4 @@
-﻿using ParkingApi.Core.Interfaces;
-
-namespace ParkingApi.Application.Features.Auth.Handlers;
+﻿namespace ParkingApi.Application.Features.Auth.Handlers;
 
 public class LogoutHandler : IRequestHandler<LogoutCommand, bool>
 {

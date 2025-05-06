@@ -1,6 +1,6 @@
 ﻿using ParkingApi.Core.Enums;
 
-namespace ParkingApi.Extensions;
+namespace ParkingApi.Infrastructure.Extensions;
 
 public static class AuthorizationExtensions
 {

@@ -1,7 +1,4 @@
-﻿using ParkingApi.Core.Interfaces;
-using ParkingApi.Core.Models;
-
-namespace ParkingApi.Application.Services;
+﻿namespace ParkingApi.Application.Services;
 
 public class EmailService : IEmailService
 {

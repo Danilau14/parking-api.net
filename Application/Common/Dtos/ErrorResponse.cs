@@ -1,4 +1,4 @@
-﻿namespace ParkingApi.Dto.Error;
+﻿namespace ParkingApi.Application.Common.Dtos;
 
 public class ErrorResponse
 {

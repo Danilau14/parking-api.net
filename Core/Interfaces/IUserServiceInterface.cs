@@ -1,6 +1,4 @@
-﻿using ParkingApi.Core.Models;
-
-namespace ParkingApi.Core.Interfaces;
+﻿namespace ParkingApi.Core.Interfaces;
 
 public interface IUserServiceInterface
 {

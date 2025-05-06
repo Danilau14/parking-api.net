@@ -1,6 +1,4 @@
-﻿using ParkingApi.Core.Interfaces;
-
-namespace ParkingApi.Application.Services;
+﻿namespace ParkingApi.Application.Services;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {

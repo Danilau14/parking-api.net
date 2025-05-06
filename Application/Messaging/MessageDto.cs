@@ -1,6 +1,4 @@
-﻿using ParkingApi.Core.Enums;
-
-namespace ParkingApi.Dto.QueueMessage;
+﻿namespace ParkingApi.Application.Messaging;
 
 public class MessageDto
 {

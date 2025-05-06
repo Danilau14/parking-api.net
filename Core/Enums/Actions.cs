@@ -1,4 +1,6 @@
-﻿public enum Actions
+﻿namespace ParkingApi.Core.Enums;
+
+public enum Actions
 {
     CREATE = 0,
     UPDATE = 1,

@@ -1,6 +1,4 @@
-﻿using ParkingApi.Core.Models;
-
-namespace ParkingApi.Application.Features.ParkingLots.Dtos;
+﻿namespace ParkingApi.Application.Mappings.ParkingsLot;
 
 public class UpdateParkingLotMapping : Profile
 {

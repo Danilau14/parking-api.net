@@ -1,6 +1,4 @@
-﻿using ParkingApi.Core.Interfaces;
-
-namespace ParkingApi.Application.Services.RabbitMQ.Publisher;
+﻿namespace ParkingApi.Application.Services.RabbitMQ.Publisher;
 
 public class RabbitMQSendMail : IRabbitMQSendMail
 {

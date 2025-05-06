@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.Design;
-using ParkingApi.Core.Interfaces;
-using ParkingApi.Core.Models;
-
-namespace ParkingApi.Application.Features.ParkingLots.Handlers;
+﻿namespace ParkingApi.Application.Features.ParkingLots.Handlers;
 
 public class RemoveParkingLotHandler : IRequestHandler<RemoveParkingLotCommand, ParkingLotDto>
 {

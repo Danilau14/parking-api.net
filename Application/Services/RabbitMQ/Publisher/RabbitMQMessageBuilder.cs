@@ -1,7 +1,4 @@
-﻿using ParkingApi.Core.Enums;
-using ParkingApi.Core.Interfaces;
-
-namespace ParkingApi.Application.Services.RabbitMQ.Publisher
+﻿namespace ParkingApi.Application.Services.RabbitMQ.Publisher
 {
     public class RabbitMQMessageBuilder : IRabbitMQMessageBuilder
     {

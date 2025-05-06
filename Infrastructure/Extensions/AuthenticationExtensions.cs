@@ -1,6 +1,6 @@
 ﻿using ParkingApi.Core.Interfaces;
 
-namespace ParkingApi.Extensions;
+namespace ParkingApi.Infrastructure.Extensions;
 
 public static class AuthenticationExtensions
 {

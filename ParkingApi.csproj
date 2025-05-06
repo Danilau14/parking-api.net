@@ -29,7 +29,6 @@
   <ItemGroup>
     <Folder Include="Application\Features\Auth\Queries\" />
     <Folder Include="Application\Features\Emails\Commands\" />
-    <Folder Include="Application\Features\Emails\Dtos\" />
     <Folder Include="Application\Features\Emails\Queries\" />
     <Folder Include="Application\Features\ParkingHistories\Dtos\" />
     <Folder Include="Application\Features\Users\Queries\" />

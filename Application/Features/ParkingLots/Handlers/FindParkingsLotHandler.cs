@@ -1,7 +1,4 @@
-﻿using ParkingApi.Core.Interfaces;
-using ParkingApi.Core.Models;
-
-namespace ParkingApi.Application.Features.ParkingLots.Handlers;
+﻿namespace ParkingApi.Application.Features.ParkingLots.Handlers;
 
 public class FindParkingsLotHandler : IRequestHandler<FindParkingsLotQuery, PagedResult<ParkingLotDto>>
 {
