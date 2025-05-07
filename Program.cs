@@ -1,5 +1,8 @@
 using System.Configuration;
 using System.Reflection;
+using Amazon.Extensions.NETCore.Setup;
+using Amazon.Runtime.SharedInterfaces;
+using Amazon.S3;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,9 +19,15 @@ builder.Services.SwaggerWithBearerToken();
 
 builder.Services.ConfigureDbContext(builder.Configuration);
 
-builder.Services.Configure<DynamoDbSettings>(builder.Configuration.GetSection("DynamoDbSettings"));
-builder.Services.AddDynamoDb(builder.Configuration);
 
+//builder.Services.Configure<DynamoDbSettings>(builder.Configuration.GetSection("DynamoDbSettings"));
+//builder.Services.AddDynamoDb(builder.Configuration);
+
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<IAmazonDynamoDB>();
+builder.Services.AddSingleton<IDynamoDBContext>(sp => new DynamoDBContext(sp.GetRequiredService<IAmazonDynamoDB>()));
+
+builder.Services.AddAWSService<IAmazonS3>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
@@ -37,11 +46,11 @@ builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 
 builder.Services.AddScoped<IRabbitMQMessageBuilder, RabbitMQMessageBuilder>();
 builder.Services.AddScoped<IRabbitMQSendMail, RabbitMQSendMail>();
+builder.Services.AddScoped<IS3Service, S3Service>();
 
 
 //builder.Services.AddScoped<IDomainEventPublisher, DomainEventPublisher>();
 //builder.Services.AddScoped<IDomainEventHandler<VehicleRegisteredEvent>, VehicleRegisteredEventHandler>();
-
 
 builder.Services.AddAuthorizationPolicies();
 

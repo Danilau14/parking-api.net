@@ -15,10 +15,12 @@
 public class ParkingsLotsController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IS3Service _s3Service;
 
-    public ParkingsLotsController(IMediator mediator)
+    public ParkingsLotsController(IMediator mediator, IS3Service s3Service) 
     {
         _mediator = mediator;
+        _s3Service = s3Service;
     }
 
     /// <summary>
@@ -156,5 +158,25 @@ public class ParkingsLotsController : ControllerBase
         var listParkingDto = await _mediator.Send(command);
 
         return Ok(listParkingDto);
+    }
+
+    [HttpPost("upload-csv")]
+    [Consumes("multipart/form-data")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UploadCsv([FromForm] UploadCsvDto dto)
+    {
+       if (dto.File == null || Path.GetExtension(dto.File.FileName).ToLower() != ".csv")
+        {
+            return BadRequest("Solo se permiten archivos CSV.");
+        }
+
+        var key = $"parking-lot/{Guid.NewGuid()}_{dto.File.FileName}";
+
+        await _s3Service.UploadFileAsync("parking-api", key, dto.File.OpenReadStream());
+
+        var fileUrl = $"http://localhost:4566/parking-api/{key}";
+
+        return Ok(new { message = "Archivo recibido correctamente.", url = fileUrl });
     }
 }

@@ -78,3 +78,5 @@ global using ParkingApi.Infrastructure.Repositories;
 global using ParkingApi.Infrastructure.RepositoriesDynamo;
 
 global using AmazonProfile = Amazon.Profile;
+
+global using Swashbuckle.AspNetCore.Annotations;

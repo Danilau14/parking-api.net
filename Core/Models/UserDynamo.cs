@@ -6,22 +6,23 @@ public class UserDynamo
     private string _email;
 
     [DynamoDBHashKey]
+    [DynamoDBProperty("id")]
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
-    [DynamoDBProperty]
+    [DynamoDBProperty("recycleBin")]
     public bool RecycleBin { get; set; } = false;
 
-    [DynamoDBProperty]
+    [DynamoDBProperty("password")]
     [Column(TypeName = "text")]
     public required string Password { get; set; }
 
-    [DynamoDBProperty]
+    [DynamoDBProperty("email")]
     public required string Email
     {
         get => _email;
         set => _email = value.ToLower();
     }
 
-    [DynamoDBProperty(typeof(EnumConverter<UserRole>))]
+    [DynamoDBProperty("role", typeof(EnumConverter<UserRole>))]
     public required UserRole Role { get; set; } = UserRole.PARTNER;
 }

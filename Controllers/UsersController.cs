@@ -6,10 +6,12 @@
 public class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IS3Service _s3Service;
 
-    public UsersController(IMediator mediator)
+    public UsersController(IMediator mediator, IS3Service s3Service)
     {
         _mediator = mediator;
+        _s3Service = s3Service;
     }
 
     /// <summary>
@@ -42,6 +44,7 @@ public class UsersController : ControllerBase
     {
         var notification = new SendEmailEvent(emailForUser.Email, emailForUser.Subject, emailForUser.Message);
         await _mediator.Publish(notification);
-        return Ok( new { Message = "Send email" });
+        var buckets = await _s3Service.ListBucketsAsync();
+        return Ok( new { Message = buckets.First() });
     }
 }

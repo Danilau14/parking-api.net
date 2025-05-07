@@ -2,7 +2,7 @@
 
 namespace ParkingApi.Infrastructure.Data;
 
-public static class DynamoDbContext
+public static class DynamoDbContext2
 {
     public static void AddDynamoDb(this IServiceCollection services, IConfiguration configuration)
     {

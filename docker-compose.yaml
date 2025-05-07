@@ -36,3 +36,5 @@ services:
         - ./localstack:/var/lib/localstack  
         - /var/run/docker.sock:/var/run/docker.sock
         - ./script/dynamodb/init-dynamodb.sh:/docker-entrypoint-initaws.d/init-dynamodb.sh
+        - ./volumes/s3-storage:/var/lib/localstack
+        - ./script/s3:/etc/localstack/init
