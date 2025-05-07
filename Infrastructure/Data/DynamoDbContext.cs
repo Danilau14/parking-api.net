@@ -1,4 +1,6 @@
-﻿namespace ParkingApi.Infrastructure.Data;
+﻿using Amazon.Runtime;
+
+namespace ParkingApi.Infrastructure.Data;
 
 public static class DynamoDbContext
 {
@@ -6,18 +8,18 @@ public static class DynamoDbContext
     {
         var dynamoDbSettings = configuration.GetSection("DynamoDbSettings").Get<DynamoDbSettings>();
 
-
         var config = new AmazonDynamoDBConfig
         {
-            ServiceURL = $"http://{dynamoDbSettings.Host}:{dynamoDbSettings.Port}", 
-            RegionEndpoint = RegionEndpoint.GetBySystemName(dynamoDbSettings.Region) 
+            ServiceURL = "http://localhost:4566",
+            UseHttp = true,
         };
 
-        Console.WriteLine(config.ServiceURL);
+        var credentials = new BasicAWSCredentials("DUMMYIDEXAMPLE", "DUMMYIDEXAMPLE");
 
-        var client = new AmazonDynamoDBClient(dynamoDbSettings.ApiKey, dynamoDbSettings.SecretKey, config);
+        //Console.WriteLine(config.ServiceURL);
+        var client = new AmazonDynamoDBClient(credentials, config);
 
         services.AddSingleton<IAmazonDynamoDB>(client);
-        services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
+        services.AddSingleton<IDynamoDBContext>(sp => new DynamoDBContext(client));
     }
 }

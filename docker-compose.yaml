@@ -29,9 +29,9 @@ services:
         - SERVICES=s3,dynamodb,logs
         - DEBUG=1
         - DOCKER_HOST=unix:///var/run/docker.sock
-        - AWS_ACCESS_KEY_ID=test-key
-        - AWS_SECRET_ACCESS_KEY=test-secret
-        - ALLOW_NONSTANDARD_REGIONS=1 
+        - AWS_ACCESS_KEY_ID=DUMMYIDEXAMPLE
+        - AWS_SECRET_ACCESS_KEY=DUMMYIDEXAMPLE
+        - AWS_REGION=us-east-1
       volumes:
         - ./localstack:/var/lib/localstack  
         - /var/run/docker.sock:/var/run/docker.sock

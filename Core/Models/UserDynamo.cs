@@ -6,7 +6,7 @@ public class UserDynamo
     private string _email;
 
     [DynamoDBHashKey]
-    public int Id { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
 
     [DynamoDBProperty]
     public bool RecycleBin { get; set; } = false;
