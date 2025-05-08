@@ -1,3 +1,3 @@
 ﻿namespace ParkingApi.Application.Features.ParkingLots.Queries;
 
-public record  FindOneByIdParkingLotQuery(int Id) : IRequest<ParkingLotDto>;
+public record  FindOneByIdParkingLotQuery(string Id) : IRequest<ParkingLotDynamo>;

@@ -1,18 +1,16 @@
 ﻿namespace ParkingApi.Application.Features.ParkingLots.Handlers;
 
-public class UpdateParkingLotHandler : IRequestHandler<UpdateParkingLotCommand, ParkingLotDto>
+public class UpdateParkingLotHandler : IRequestHandler<UpdateParkingLotCommand, ParkingLotDynamo>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
     public UpdateParkingLotHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
-        _mapper = mapper;
     }
 
-    public async Task<ParkingLotDto> Handle(UpdateParkingLotCommand command, CancellationToken cancellationToken)
+    public async Task<ParkingLotDynamo> Handle(UpdateParkingLotCommand command, CancellationToken cancellationToken)
     {
-        var parkingLot = await _unitOfWork.ParkingLotRepository.GetByIdAsync(command.id);
+        var parkingLot = await _unitOfWork.ParkingLotRepositoryDynamo.GetByIdAsync(command.id);
 
         if (parkingLot == null)
         {
@@ -26,9 +24,9 @@ public class UpdateParkingLotHandler : IRequestHandler<UpdateParkingLotCommand, 
 
         var updatedParkingLotDto = command.UpdatedParkingLotDto;
 
-        if (updatedParkingLotDto.PartnerId.HasValue)
+        if (updatedParkingLotDto.PartnerId != null)
         {
-            var partner = await _unitOfWork.UserRepository.GetByIdAsync(updatedParkingLotDto.PartnerId.Value);
+            var partner = await _unitOfWork.UserRepositoryDynamo.GetByIdAsync(updatedParkingLotDto.PartnerId);
 
             if (partner == null)
             {
@@ -40,7 +38,6 @@ public class UpdateParkingLotHandler : IRequestHandler<UpdateParkingLotCommand, 
                 );
             }
 
-            parkingLot.User = partner;
             parkingLot.UserId = partner.Id;
         }
 
@@ -74,8 +71,8 @@ public class UpdateParkingLotHandler : IRequestHandler<UpdateParkingLotCommand, 
             parkingLot.CostPerHour = updatedParkingLotDto.CostPerHour.Value;
         }
 
-        var parkingLotUpdate = await _unitOfWork.ParkingLotRepository.UpdatedParkingLot(parkingLot);
+        var parkingLotUpdate = await _unitOfWork.ParkingLotRepositoryDynamo.UpdatedParkingLot(parkingLot);
 
-        return _mapper.Map<ParkingLotDto>(parkingLotUpdate);
+        return parkingLotUpdate;
         }
     }

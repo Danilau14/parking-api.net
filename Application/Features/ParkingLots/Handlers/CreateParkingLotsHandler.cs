@@ -1,6 +1,6 @@
 ﻿namespace ParkingApi.Application.Features.ParkingLots.Handlers;
 
-public class CreateParkingLotsHandler : IRequestHandler<CreateParkingLotsCommand, ParkingLotDto>
+public class CreateParkingLotsHandler : IRequestHandler<CreateParkingLotsCommand, ParkingLotDynamo>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -11,19 +11,18 @@ public class CreateParkingLotsHandler : IRequestHandler<CreateParkingLotsCommand
         _mapper = mapper;
     }
 
-    public async Task<ParkingLotDto> Handle(CreateParkingLotsCommand command, CancellationToken cancellation)
+    public async Task<ParkingLotDynamo> Handle(CreateParkingLotsCommand command, CancellationToken cancellation)
     {
-        var parkingLot = new ParkingLot
+        var parkingLot = new ParkingLotDynamo
         {
             CostPerHour = command.CostPerHour,
             FreeSpaces = command.Size,
             Size = command.Size,
-            ParkingHistories = new List<ParkingHistory>()
         };
 
         if (command.PartnerId != null)
         {
-            var partnerExist = await _unitOfWork.UserRepository.GetByIdAsync(command.PartnerId.Value);
+            var partnerExist = await _unitOfWork.UserRepositoryDynamo.GetByIdAsync(command.PartnerId);
 
             if (null == partnerExist)
             {
@@ -37,8 +36,8 @@ public class CreateParkingLotsHandler : IRequestHandler<CreateParkingLotsCommand
             parkingLot.UserId = partnerExist.Id;
         }
 
-        var parkingLotSaved = await _unitOfWork.ParkingLotRepository.CreateParkingLot(parkingLot);
+        var parkingLotSaved = await _unitOfWork.ParkingLotRepositoryDynamo.CreateParkingLot(parkingLot);
 
-        return _mapper.Map<ParkingLotDto>(parkingLotSaved);
+        return parkingLotSaved;
     }
 }

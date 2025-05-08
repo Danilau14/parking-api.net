@@ -1,7 +1,4 @@
-﻿using ParkingApi.Core.Interfaces;
-using ParkingApi.Infrastructure.Data;
-
-namespace ParkingApi.Infrastructure.Repositories;
+﻿namespace ParkingApi.Infrastructure.Repositories;
 
 public class ParkingLotRepository : BaseRepository<ParkingLot>, IParkingLotRepository
 {

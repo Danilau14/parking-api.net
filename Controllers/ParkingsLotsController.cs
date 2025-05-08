@@ -41,7 +41,7 @@ public class ParkingsLotsController : ControllerBase
     /// </exception>
     [HttpPost]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<IActionResult> CrearteParkingLot([FromBody] CreateParkingLotDto createParkingLotDto)
+    public async Task<IActionResult> CreateParkingLot([FromBody] CreateParkingLotDto createParkingLotDto)
     {
         var command = new CreateParkingLotsCommand(
                 createParkingLotDto.Size,
@@ -71,7 +71,7 @@ public class ParkingsLotsController : ControllerBase
     /// </exception>
     [HttpGet("{id}")]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<IActionResult> FindOneParkingLot(int id)
+    public async Task<IActionResult> FindOneParkingLot(string id)
     {
         var command = new FindOneByIdParkingLotQuery(id);
         var parkingLotFound = await _mediator.Send(command);
@@ -101,7 +101,7 @@ public class ParkingsLotsController : ControllerBase
     /// </exception>
     [HttpPatch("{id}")]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<IActionResult> UpdatedParkingLot( int id, [FromBody] UpdatedParkingLotDto updatedParkingLotDto)
+    public async Task<IActionResult> UpdatedParkingLot( string id, [FromBody] UpdatedParkingLotDto updatedParkingLotDto)
     {
         var command = new UpdateParkingLotCommand(id, updatedParkingLotDto);    
         var parkingLotUpdated = await _mediator.Send(command);
@@ -176,6 +176,9 @@ public class ParkingsLotsController : ControllerBase
         await _s3Service.UploadFileAsync("parking-api", key, dto.File.OpenReadStream());
 
         var fileUrl = $"http://localhost:4566/parking-api/{key}";
+
+        var command =  new CreateBatchParkingLotCommand(dto.File);
+        await _mediator.Send(command);  
 
         return Ok(new { message = "Archivo recibido correctamente.", url = fileUrl });
     }

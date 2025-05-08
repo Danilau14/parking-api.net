@@ -33,24 +33,4 @@ public class UserRepositoryDynamo : BaseRepositoryDynamo<UserDynamo>, IUserRepos
             return (0, ex.Message);
         }
     }
-
-    public Task<UserDynamo?> GetByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Update(UserDynamo entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Delete(UserDynamo entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task SaveChangesAsync()
-    {
-        throw new NotImplementedException();
-    }
 }

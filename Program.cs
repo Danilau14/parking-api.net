@@ -25,14 +25,24 @@ builder.Services.ConfigureDbContext(builder.Configuration);
 
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSService<IAmazonDynamoDB>();
-builder.Services.AddSingleton<IDynamoDBContext>(sp => new DynamoDBContext(sp.GetRequiredService<IAmazonDynamoDB>()));
+builder.Services.AddSingleton<IDynamoDBContext>(sp =>
+{
+    var client = sp.GetRequiredService<IAmazonDynamoDB>();
 
+    var config = new DynamoDBContextConfig
+    {
+        Conversion = DynamoDBEntryConversion.V2 // Guarda los bool como bool
+    };
+
+    return new DynamoDBContext(client, config);
+});
 builder.Services.AddAWSService<IAmazonS3>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
 builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
+builder.Services.AddScoped<IConverterCsvToList, ConverterCsvToList>();
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -40,6 +50,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserRepositoryDynamo, UserRepositoryDynamo>();
 builder.Services.AddScoped<IRevokedTokenRepository, RevokedTokenRepository>();
 builder.Services.AddScoped<IParkingLotRepository, ParkingLotRepository>();
+builder.Services.AddScoped<IParkingLotRepositoryDynamo, ParkingLotRepositoryDynamo>();
 builder.Services.AddScoped<IParkingHistoryRepository, ParkingHistoryRepository>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 

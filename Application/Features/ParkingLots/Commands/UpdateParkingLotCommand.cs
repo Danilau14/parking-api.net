@@ -1,3 +1,3 @@
 ﻿namespace ParkingApi.Application.Features.ParkingLots.Commands;
 
-public record UpdateParkingLotCommand(int id, UpdatedParkingLotDto UpdatedParkingLotDto) : IRequest<ParkingLotDto>;
+public record UpdateParkingLotCommand(string id, UpdatedParkingLotDto UpdatedParkingLotDto) : IRequest<ParkingLotDynamo>;

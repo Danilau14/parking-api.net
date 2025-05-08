@@ -1,6 +1,6 @@
 ﻿namespace ParkingApi.Application.Features.ParkingLots.Handlers;
 
-public class FindOneByIdParkingLotHandler : IRequestHandler<FindOneByIdParkingLotQuery, ParkingLotDto>
+public class FindOneByIdParkingLotHandler : IRequestHandler<FindOneByIdParkingLotQuery, ParkingLotDynamo>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -10,9 +10,9 @@ public class FindOneByIdParkingLotHandler : IRequestHandler<FindOneByIdParkingLo
         _mapper = mapper;
     }
 
-    public async Task<ParkingLotDto> Handle(FindOneByIdParkingLotQuery query, CancellationToken cancellationToken)
+    public async Task<ParkingLotDynamo> Handle(FindOneByIdParkingLotQuery query, CancellationToken cancellationToken)
     {
-        var parkingLot = await _unitOfWork.ParkingLotRepository.GetByIdAsync(query.Id);
+        var parkingLot = await _unitOfWork.ParkingLotRepositoryDynamo.GetByIdAsync(query.Id);
 
         if (parkingLot == null)
         {
@@ -24,6 +24,6 @@ public class FindOneByIdParkingLotHandler : IRequestHandler<FindOneByIdParkingLo
             );
         }
 
-        return _mapper.Map<ParkingLotDto>(parkingLot);
+        return parkingLot;
     }
 }

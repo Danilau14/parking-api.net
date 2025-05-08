@@ -1,5 +1,3 @@
 ﻿namespace ParkingApi.Application.Features.ParkingLots.Commands;
 
-public class CreateBatchParkingLotCommand()
-{
-}
+public record CreateBatchParkingLotCommand(IFormFile Csv) : IRequest<bool>;

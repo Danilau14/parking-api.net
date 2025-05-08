@@ -8,6 +8,7 @@ public class UnitOfWork : IUnitOfWork
     private IUserRepositoryDynamo? _userRepositoryDynamo;
     private IRevokedTokenRepository? _revokedTokenRepository;
     private IParkingLotRepository? _parkingLotRepository;
+    private IParkingLotRepositoryDynamo? _parkingLotRepositoryDynamo;
     private IParkingHistoryRepository? _parkingHistoryRepository;   
     private IVehicleRepository? _vehicleRepository;
 
@@ -18,11 +19,18 @@ public class UnitOfWork : IUnitOfWork
     }
     public ApplicationDbContext Context { get => _context; }
 
-    public IUserRepositoryDynamo UserRepositoryDynamo => _userRepositoryDynamo ??= new UserRepositoryDynamo(_dynamoDBContext);
-
-    public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
-    public IRevokedTokenRepository RevokedTokenRepository => _revokedTokenRepository ??= new RevokedTokenRepository(_context);
-    public IParkingLotRepository ParkingLotRepository => _parkingLotRepository ??= new ParkingLotRepository(_context);
-    public IParkingHistoryRepository ParkingHistoryRepository => _parkingHistoryRepository ??= new ParkingHistoryRepository(_context);
-    public IVehicleRepository VehicleRepository => _vehicleRepository ??= new VehicleRepository(_context);
+    public IUserRepositoryDynamo UserRepositoryDynamo => 
+        _userRepositoryDynamo ??= new UserRepositoryDynamo(_dynamoDBContext);
+    public IUserRepository UserRepository => 
+        _userRepository ??= new UserRepository(_context);
+    public IRevokedTokenRepository RevokedTokenRepository =>
+        _revokedTokenRepository ??= new RevokedTokenRepository(_context);
+    public IParkingLotRepositoryDynamo ParkingLotRepositoryDynamo => 
+        _parkingLotRepositoryDynamo ??= new ParkingLotRepositoryDynamo(_dynamoDBContext);
+    public IParkingLotRepository ParkingLotRepository => 
+        _parkingLotRepository ??= new ParkingLotRepository(_context);
+    public IParkingHistoryRepository ParkingHistoryRepository => 
+        _parkingHistoryRepository ??= new ParkingHistoryRepository(_context);
+    public IVehicleRepository VehicleRepository => 
+        _vehicleRepository ??= new VehicleRepository(_context);
 }

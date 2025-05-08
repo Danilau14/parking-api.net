@@ -22,9 +22,9 @@ awslocal dynamodb create-table \
 
 echo "Creating ParkingLots table..."
 awslocal dynamodb create-table \
-  --table-name ParkingLots \
-  --key-schema AttributeName=Id,KeyType=HASH \
-  --attribute-definitions AttributeName=Id,AttributeType=S \
+  --table-name ParkingsLot \
+  --key-schema AttributeName=id,KeyType=HASH \
+  --attribute-definitions AttributeName=id,AttributeType=S \
   --billing-mode PAY_PER_REQUEST
 
 echo "Creating ParkingHistories table..."

@@ -10,6 +10,5 @@ public class CreateParkingLotDto
     [Range(0.1, float.MaxValue, ErrorMessage = "The costPerHour must be greater than 0")]
     public required float CostPerHour { get; set; }
 
-    [Range(1, int.MaxValue, ErrorMessage = "Invalid PartnerId")]
-    public int? PartnerId { get; set; }
+    public string? PartnerId { get; set; }
 }
